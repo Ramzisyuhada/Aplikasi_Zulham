@@ -33,9 +33,16 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
+
 }
 
 dependencies {
+    val lottieVersion = "3.4.0"
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

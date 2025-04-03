@@ -1,0 +1,220 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".register">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.14"
+
+        />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline"
+        />
+
+    <TextView
+        android:id="@+id/Registerhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lengkapi data diri Anda."
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="8dp"/>
+    <TextView
+        android:id="@+id/usernamehead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nama Lengkap"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Registerhead"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="46dp"/>
+    <EditText
+
+        android:id="@+id/registerusername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_editextkosong"
+        android:hint="Masukan nama lengkap"
+        android:paddingStart="49dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernamehead"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"
+        android:elevation="12dp"/>
+
+
+    <TextView
+        android:id="@+id/emailhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerusername"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="8dp"/>
+    <EditText
+
+        android:id="@+id/registeremail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_editextkosong"
+        android:hint="Masukan email yang aktif"
+        android:paddingStart="49dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailhead"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"
+        android:elevation="12dp"/>
+
+
+    <TextView
+        android:id="@+id/passwordhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registeremail"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="8dp"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/registerpassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Minimal 8 karakter"
+        app:endIconMode="password_toggle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordhead"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_editextkosong"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:paddingStart="49dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/passwordhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerpassword"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="8dp"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/registerpasswordsama"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Masukkan kembali password"
+        app:endIconMode="password_toggle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordhead2"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_editextkosong"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:paddingStart="49dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/Registerbutton"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/registerpasswordsama"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:text="Daftar"
+        android:background="@drawable/style_registerbutton_masuk"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="32dp"/>
+
+
+
+    <TextView
+        android:id="@+id/textclick"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sudah Punya akun ?"
+        android:textSize="12sp"
+        android:layout_marginTop="24dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/TextColor"
+        app:layout_constraintTop_toBottomOf="@id/Registerbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/click" />
+
+    <TextView
+        android:id="@+id/click"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Masuk"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/TextColor"
+        android:layout_marginStart="5dp"
+        app:layout_constraintTop_toBottomOf="@id/Registerbutton"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/textclick"
+        app:layout_constraintStart_toEndOf="@id/textclick"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
