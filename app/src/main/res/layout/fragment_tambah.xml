@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".View.TambahFragment">
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+
+        android:layout_height="wrap_content">
+
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/bg">
+
+
+       <androidx.constraintlayout.widget.Guideline
+           android:id="@+id/guideline"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           app:layout_constraintGuide_percent="0.0" />
+
+       <TextView
+           android:id="@+id/header"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:text="Tambah Laporan"
+           android:textSize="28dp"
+           android:layout_marginLeft="19dp"
+           app:layout_constraintTop_toBottomOf="@id/guideline"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:textStyle="bold"
+           />
+
+       <androidx.cardview.widget.CardView
+           android:id="@+id/cardalert"
+           android:layout_width="0dp"
+           android:layout_height="77dp"
+           android:layout_marginHorizontal="23dp"
+           android:layout_marginTop="8dp"
+           app:layout_constraintTop_toBottomOf="@id/header"
+           app:layout_constraintBottom_toTopOf="@id/recyclerView"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+               app:cardCornerRadius="10dp"
+               app:cardBackgroundColor="@color/alertbiru">
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="horizontal"
+               android:gravity="center_vertical"
+               android:padding="10dp">
+
+               <ImageView
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   android:src="@drawable/baseline_info_24"
+                   android:layout_marginStart="17dp"
+                   app:tint="#2C3A57" />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginStart="12dp"
+                   android:text="@string/alerttambah"
+                   android:textSize="16sp"
+                   android:textColor="@color/black"/>
+
+           </LinearLayout>
+
+       </androidx.cardview.widget.CardView>
+
+
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/recyclerView"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="23dp"
+               android:layout_marginHorizontal="23dp"
+               app:layout_constraintTop_toBottomOf="@id/cardalert"
+               app:layout_constraintBottom_toTopOf="@id/headmedia"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               />
+
+       <TextView
+           android:id="@+id/headmedia"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="23dp"
+           android:layout_marginLeft="23dp"
+           android:textSize="16dp"
+           android:textColor="#929292"
+           app:layout_constraintTop_toBottomOf="@id/recyclerView"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:text="Media (Foto)"
+           />
+
+
+       <androidx.cardview.widget.CardView
+           android:layout_marginTop="13dp"
+           android:id="@+id/buttonmedia"
+           android:clickable="true"
+           android:focusable="true"
+           android:layout_width="0dp"
+           android:layout_height="53dp"
+           app:layout_constraintTop_toBottomOf="@id/headmedia"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:cardBackgroundColor="#EFF2F7"
+           android:layout_marginHorizontal="23dp"
+
+           >
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_marginLeft="22dp"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_add_24"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:gravity="start"
+
+                    android:text="Tambah Media"
+                    android:textSize="24dp" />
+
+            </LinearLayout>
+
+
+
+
+
+       </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
+       <TextView
+           android:id="@+id/headlokasi"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="51dp"
+           android:layout_marginLeft="23dp"
+           android:textSize="16dp"
+           android:textColor="#929292"
+           app:layout_constraintTop_toBottomOf="@id/buttonmedia"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:text="Lokasi"
+           />
+
+
+
+
+
+       <androidx.cardview.widget.CardView
+           android:id="@+id/lok"
+           app:layout_constraintTop_toBottomOf="@id/headlokasi"
+           android:layout_width="match_parent"
+           app:cardBackgroundColor="?attr/colorSurface"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="23dp"
+           android:layout_marginHorizontal="23dp"
+           app:cardElevation="0dp"
+
+           >
+
+
+           <androidx.constraintlayout.widget.ConstraintLayout
+
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:cardBackgroundColor="?attr/colorSurface"
+
+               >
+               <LinearLayout
+                   android:id="@+id/lat"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"
+                   >
+                   <LinearLayout
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical"
+                       android:layout_weight="1">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Latitude"
+                           android:textSize="12sp"
+                           android:textColor="#929292" />
+
+                       <TextView
+                           android:id="@+id/Latitude"
+                           android:layout_marginTop="4dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text=""
+                           android:textSize="12sp"
+                           android:textColor="#929292" />
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical"
+                       android:layout_weight="1"
+                       android:layout_marginLeft="20dp">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Longitude"
+                           android:textSize="12sp"
+                           android:textColor="#929292" />
+
+                       <TextView
+                           android:id="@+id/Longitude"
+                           android:layout_marginTop="4dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text=""
+                           android:textSize="12sp"
+                           android:textColor="#929292" />
+                   </LinearLayout>
+               </LinearLayout>
+
+               <androidx.cardview.widget.CardView
+                   android:layout_marginTop="20dp"
+                   android:id="@+id/cardMap"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:cardCornerRadius="16dp"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toBottomOf="@id/lat"
+                   android:orientation="horizontal"
+                   app:cardElevation="0dp"
+
+                   >
+                   <org.osmdroid.views.MapView
+                       android:id="@+id/mapview"
+                       android:layout_width="match_parent"
+                       android:layout_height="200dp"
+
+                       />
+
+
+
+               </androidx.cardview.widget.CardView>
+
+               <androidx.appcompat.widget.AppCompatButton
+                   android:id="@+id/ubahlokasi"
+                   android:layout_width="0dp"
+                   android:layout_height="50dp"
+                   android:background="@drawable/style_registerbutton_masuk"
+                   android:text="Ubah lokasi"
+                   android:textSize="12dp"
+                   android:textColor="@color/white"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintTop_toBottomOf="@id/cardMap"
+                   android:layout_marginTop="15dp"
+                   android:layout_marginRight="15dp"
+                   />
+               <TextView
+                   android:layout_width="0dp"
+                   android:text="Mohon pastikan koordinat sudah sesuai dengan lokasi laporan"
+                   android:layout_height="wrap_content"
+                   app:layout_constraintStart_toStartOf="parent"
+                   android:textSize="16dp"
+                   android:textColor="#FF7F00"
+                   app:layout_constraintTop_toBottomOf="@id/ubahlokasi"/>
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+       </androidx.cardview.widget.CardView>
+
+
+       <androidx.cardview.widget.CardView
+           android:layout_marginTop="13dp"
+           android:id="@+id/buttonlokasi"
+           android:clickable="true"
+           android:focusable="true"
+           android:layout_width="0dp"
+           android:layout_height="53dp"
+           app:layout_constraintTop_toBottomOf="@id/lok"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:cardBackgroundColor="#EFF2F7"
+           android:layout_marginHorizontal="23dp"
+
+           >
+
+
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:orientation="horizontal"
+               android:gravity="center_vertical"
+               android:layout_height="match_parent">
+
+               <ImageView
+                   android:layout_marginLeft="22dp"
+                   android:layout_width="35dp"
+                   android:layout_height="match_parent"
+                   android:src="@drawable/baseline_gps_fixed_24"/>
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Tambah Lokasi"
+                   android:layout_marginLeft="13dp"
+                   android:textSize="24dp"
+                   />
+
+           </LinearLayout>
+       </androidx.cardview.widget.CardView>
+
+
+       <TextView
+           android:id="@+id/alertorange"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="9dp"
+           android:layout_marginLeft="23dp"
+           android:textSize="16dp"
+           android:textStyle="bold"
+           android:textColor="#FF7F00"
+           app:layout_constraintTop_toBottomOf="@id/buttonlokasi"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:text="Mohon pastikan koordinat sudah sesuai dengan lokasi laporan"
+           />
+
+
+       <TextView
+           android:id="@+id/headkategori"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="51dp"
+           android:layout_marginLeft="23dp"
+           android:textSize="16dp"
+           android:textColor="#929292"
+           app:layout_constraintTop_toBottomOf="@id/alertorange"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:text="Kategori"
+           />
+
+       <Spinner
+           android:id="@+id/PartKategori"
+           android:layout_marginHorizontal="23dp"
+
+           android:layout_marginTop="15dp"
+           android:paddingLeft="30dp"
+           android:layout_width="0dp"
+           app:layout_constraintTop_toBottomOf="@id/headkategori"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:background="@drawable/style_spiner"
+           android:layout_height="48dp"/>
+       <TextView
+           android:id="@+id/headkacatatan"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="56dp"
+           android:layout_marginLeft="23dp"
+           android:textSize="16dp"
+           android:textColor="#929292"
+           app:layout_constraintTop_toBottomOf="@id/PartKategori"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:text="Catatan"
+           />
+
+       <com.google.android.material.textfield.TextInputLayout
+           android:id="@+id/catatan"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/headkacatatan"
+           android:layout_marginTop="15dp"
+           android:layout_marginHorizontal="23dp"
+           android:elevation="12dp">
+
+           <com.google.android.material.textfield.TextInputEditText
+               android:id="@+id/catatanEditText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@drawable/style_spiner"
+               android:hint="Masukan Catatan"
+               android:textSize="16sp"
+               android:paddingStart="49dp"
+               android:paddingEnd="16dp"
+               android:paddingTop="12dp"
+               android:paddingBottom="12dp"
+               android:imeOptions="actionDone" />
+       </com.google.android.material.textfield.TextInputLayout>
+
+
+       <LinearLayout
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/catatan"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_marginHorizontal="44dp"
+
+           android:layout_marginTop="53dp">
+
+           <!-- Tombol Simpan -->
+           <androidx.appcompat.widget.AppCompatButton
+               android:id="@+id/simpan"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:text="Simpan"
+               android:textStyle="bold"
+               android:textSize="12sp"
+               android:textAlignment="center"
+               android:textColor="@color/TextColor"/>
+
+           <!-- Tombol Kirim -->
+           <androidx.appcompat.widget.AppCompatButton
+               android:id="@+id/Tambah"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:layout_marginStart="5dp"
+               android:clickable="true"
+               android:background="@drawable/style_registerbutton_masuk"
+               android:text="Kirim"
+               android:textSize="12sp"
+               android:textStyle="bold"
+               android:textColor="@color/white"/>
+
+       </LinearLayout>
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>

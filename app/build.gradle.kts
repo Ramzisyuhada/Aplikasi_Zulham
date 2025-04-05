@@ -40,6 +40,16 @@ android {
 }
 
 dependencies {
+
+    implementation( "org.osmdroid:osmdroid-android:6.1.14")
+
+    val camerax_version = "1.3.0"
+
+    implementation ("androidx.camera:camera-core:$camerax_version")
+    implementation ("androidx.camera:camera-camera2:$camerax_version")
+    implementation ("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation ("androidx.camera:camera-view:$camerax_version")
+
     val lottieVersion = "3.4.0"
     implementation ("com.airbnb.android:lottie:$lottieVersion")
     implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")

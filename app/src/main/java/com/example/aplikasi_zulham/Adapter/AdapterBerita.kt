@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.aplikasi_zulham.Model.Berita
+import com.example.aplikasi_zulham.Model.Laporan
 import com.example.aplikasi_zulham.R
 
 class AdapterBerita(
-    private val beritaList: ArrayList<Berita>,
-    private val onItemClick: (Berita) -> Unit
+    private val beritaList: ArrayList<Laporan>,
+    private val onItemClick: (Laporan) -> Unit
 ) : RecyclerView.Adapter<AdapterBerita.AdapterViewHolder>() {
+
 
     class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.beritagambar)
@@ -28,9 +29,9 @@ class AdapterBerita(
     override fun onBindViewHolder(holder: AdapterViewHolder, position: Int) {
         val berita = beritaList[position]
 
-        holder.image.setImageBitmap(berita.Image)
-        holder.textBerita.text = berita.Aduan
-        holder.time.text = berita.Time
+        holder.image.setImageBitmap(berita.image)
+        holder.textBerita.text = berita.aduan
+        holder.time.text = berita.time
 
         holder.itemView.setOnClickListener {
             onItemClick(berita)
@@ -40,4 +41,5 @@ class AdapterBerita(
     override fun getItemCount(): Int {
         return beritaList.size
     }
+
 }

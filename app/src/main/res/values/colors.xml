@@ -9,4 +9,7 @@
     <color name="TextColor">#000000</color>
     <color name="IconColor">#5C5C5C</color>
     <color name="bg">#FFF8F8</color>
+    <color name="alertbiru">#DAE9FB</color>
+    <color name="iconbiru">#2C3A57</color>
+
 </resources>
