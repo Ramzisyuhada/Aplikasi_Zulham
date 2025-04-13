@@ -13,7 +13,7 @@ import com.example.aplikasi_zulham.R
 
 class AdapterMedia(
     private var beritaList: ArrayList<Aduan>,
-    private val onItemClick: (Aduan) -> Unit,
+    private val onItemClick: (Aduan,Int) -> Unit,
     private val onDetailsClick: (Aduan,Int) -> Unit
 
 ) : RecyclerView.Adapter<AdapterMedia.AdapterViewHolder>() {
@@ -39,7 +39,7 @@ class AdapterMedia(
         if(berita.Gambar.isNotEmpty())  holder.image.setImageBitmap( berita.Gambar.last)
 
         holder.itemView.setOnClickListener {
-            onItemClick(berita)
+            onItemClick(berita,position)
         }
         holder.detailsButton.setOnClickListener {
             onDetailsClick(berita,position)

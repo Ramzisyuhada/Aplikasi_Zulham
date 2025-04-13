@@ -14,4 +14,14 @@ class ViewModelAduan : ViewModel() {
     var Kategori: String = ""
     var alamat: Alamat = Alamat() //
     var media = MutableLiveData<ArrayList<Aduan>>(ArrayList())
+
+    fun clear() {
+        Judul = ""
+        Image = null
+        Aduan = Aduan()           // buat ulang object-nya
+        Time = ""
+        Kategori = ""
+        alamat = Alamat()         // buat ulang object-nya
+        media.value = ArrayList() // kosongkan list
+    }
 }

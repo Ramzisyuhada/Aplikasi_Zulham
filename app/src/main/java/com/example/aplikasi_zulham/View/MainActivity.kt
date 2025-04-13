@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         binding.NavButton.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.add -> replaceFragment(TambahFragment())
+                R.id.add -> replaceFragment(TutorialFragment())
                 R.id.user -> replaceFragment(UserFragment())
             }
             true

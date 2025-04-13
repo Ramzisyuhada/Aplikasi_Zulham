@@ -91,7 +91,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:src="@drawable/achievement"/>
-<!--                    -->
+                    <!--                    -->
 
                     <TextView
                         android:layout_gravity="center"
