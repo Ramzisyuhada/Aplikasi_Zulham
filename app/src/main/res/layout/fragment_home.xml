@@ -136,7 +136,7 @@
                 <LinearLayout
                     android:layout_marginLeft="18dp"
                     android:layout_marginTop="18dp"
-                    android:id="@+id/weather"
+                    android:id="@+id/Pembersihan"
                     android:padding="20dp"
                     android:layout_columnSpan="1"
                     android:layout_rowWeight="1"
@@ -154,7 +154,7 @@
                         android:layout_gravity="center"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/cloudy"/>
+                        android:src="@drawable/achievement"/>
                     <!--                    -->
 
                     <TextView
@@ -164,7 +164,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="WeatherSmart"
+                        android:text="Pembersihan Umum"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -189,7 +189,6 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:src="@drawable/zone"/>
-                    <!--                    -->
 
                     <TextView
                         android:layout_gravity="center"
