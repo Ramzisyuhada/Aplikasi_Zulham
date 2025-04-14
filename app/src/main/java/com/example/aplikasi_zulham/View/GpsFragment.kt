@@ -2,6 +2,7 @@ package com.example.aplikasi_zulham.View
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -27,6 +28,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
@@ -155,6 +157,27 @@ class GpsFragment : Fragment(), MapListener {
         tapMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         mapView.overlays.add(tapMarker)
 
+        val polygon = Polygon()
+        polygon.fillPaint.color = Color.argb(50, 255, 0, 0) // transparan merah
+        polygon.outlinePaint.color = Color.RED
+
+        polygon.points = listOf(
+            GeoPoint(-6.9620, 107.7540), // Titik A
+            GeoPoint(-6.9645, 107.7560), // Titik B
+            GeoPoint(-6.9655, 107.7590), // Titik C
+            GeoPoint(-6.9670, 107.7610), // Titik D
+            GeoPoint(-6.9685, 107.7650), // Titik E
+            GeoPoint(-6.9700, 107.7680), // Titik F
+            GeoPoint(-6.9705, 107.7700), // Titik G
+            GeoPoint(-6.9700, 107.7730), // Titik H
+            GeoPoint(-6.9680, 107.7750), // Titik I
+            GeoPoint(-6.9655, 107.7760), // Titik J
+            GeoPoint(-6.9635, 107.7735), // Titik K
+            GeoPoint(-6.9620, 107.7540)  // Kembali ke titik awal untuk menutup polygon
+        )
+
+        polygon.title = "Area Kabupaten Merah"
+        mapView.overlays.add(polygon)
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
