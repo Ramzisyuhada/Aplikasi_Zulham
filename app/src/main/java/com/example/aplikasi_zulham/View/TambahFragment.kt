@@ -1,6 +1,8 @@
 package com.example.aplikasi_zulham.View
 
 import android.graphics.Bitmap
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.R
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +26,8 @@ import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.example.aplikasi_zulham.util.GpsHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import java.io.IOException
+import java.util.Locale
 
 class TambahFragment : Fragment() {
 
@@ -36,7 +41,6 @@ class TambahFragment : Fragment() {
     private val media = ArrayList<Laporan>()
     private val currentAduan = Aduan()
 
-    val JenisPelanggaran = listOf("sampah berserakan","vandalisme","kerusakan fasilitas umum", "praktik illegal")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,39 +48,54 @@ class TambahFragment : Fragment() {
     }
 
     private fun setupMap() {
-        binding.mapview.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-        binding.mapview.setMultiTouchControls(true)
-        binding.mapview.controller.setZoom(15.0)
 
-        gpsHelper = GpsHelper(requireContext(), binding.mapview)
-        gpsHelper.setupLocation(centerOnMyLocation = false)
-
-        binding.mapview.postDelayed({
-            gpsHelper.setLocationByLatLng(datalaporan.alamat.latitude, datalaporan.alamat.longitude)
-        }, 1000)
+//        binding.mapview.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+//        binding.mapview.setMultiTouchControls(true)
+//        binding.mapview.controller.setZoom(15.0)
+//
+//        gpsHelper = GpsHelper(requireContext(), binding.mapview)
+//        gpsHelper.setupLocation(centerOnMyLocation = false)
+//
+//        binding.mapview.postDelayed({
+//            gpsHelper.setLocationByLatLng(datalaporan.alamat.latitude, datalaporan.alamat.longitude)
+//        }, 1000)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         bottomNav.visibility = View.GONE
+        val  gps = GpsHelper(requireContext())
+        gps.getLocation{lat, lon ->
+            Log.i("GPS", "Alamat : "+            getAddressFromCoordinates(lat,lon)
+            )
 
-
+        }
         datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java]
 
 
-        binding.simpan.setOnClickListener {
+//        binding.simpan.setOnClickListener {
+//
+//            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+//
+//
+//            parentFragmentManager.beginTransaction().replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
+//
+//            .addToBackStack(null)
+//            .commit()
+//
+//            bottomNav.visibility = View.VISIBLE
+//            bottomNav.selectedItemId = R.id.home
+//        }
 
-            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        binding.Tambah.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
+                .addToBackStack(null)
+                .commit()
+            datalaporan.clear()
 
 
-            parentFragmentManager.beginTransaction().replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
-
-            .addToBackStack(null)
-            .commit()
-
-            bottomNav.visibility = View.VISIBLE
-            bottomNav.selectedItemId = R.id.home
         }
         datalaporan.Aduan.DeskripsiMasalah?.let {
             value ->
@@ -96,95 +115,77 @@ class TambahFragment : Fragment() {
         }
 
 
-        val Adapter_Pelanggaran = ArrayAdapter(
-            requireContext(),
-            R.layout.support_simple_spinner_dropdown_item, JenisPelanggaran
-        )
-        Adapter_Pelanggaran.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-        binding.PartKategori.adapter = Adapter_Pelanggaran
-        if (datalaporan.Aduan.KategoriAduan.isNotEmpty()) {
-            val index = JenisPelanggaran.indexOf(datalaporan.Aduan.KategoriAduan)
-            if (index != -1) {
-                binding.PartKategori.setSelection(index)
-            }
-        }
-        binding.PartKategori.onItemSelectedListener =  object  :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                datalaporan.Aduan.KategoriAduan = p0?.getItemAtPosition(p2).toString()
-            }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-        }
-
-        if (datalaporan.alamat.OnMap) {
-            binding.lok.visibility = View.VISIBLE
-            binding.buttonlokasi.visibility = View.GONE
-            binding.alertorange.visibility = View.GONE
-
-            setupMap()
-
-            binding.Latitude.text = datalaporan.alamat.latitude.toString()
-            binding.Longitude.text = datalaporan.alamat.longitude.toString()
-
-            binding.ubahlokasi.setOnClickListener {
-
-                parentFragmentManager.beginTransaction()
-                    .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }else{
-            binding.lok.visibility = View.GONE
-
-        }
+//        if (datalaporan.alamat.OnMap) {
+//            binding.lok.visibility = View.VISIBLE
+//            binding.buttonlokasi.visibility = View.GONE
+//            binding.alertorange.visibility = View.GONE
+//
+//            setupMap()
+//
+//            binding.Latitude.text = datalaporan.alamat.latitude.toString()
+//            binding.Longitude.text = datalaporan.alamat.longitude.toString()
+//
+//            binding.ubahlokasi.setOnClickListener {
+//
+//                parentFragmentManager.beginTransaction()
+//                    .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
+//                    .addToBackStack(null)
+//                    .commit()
+//            }
+//        }else{
+//            binding.lok.visibility = View.GONE
+//
+//        }
         Log.i("Aduan", "Data gambar: ${datalaporan.media.value}")
 
-        initRecycler()
-
-
-        if ( datalaporan.media.value!!.isNotEmpty() ) {
-            binding.recyclerView.visibility = View.VISIBLE
 
 
 
-        } else {
-
-            binding.recyclerView.visibility = View.GONE
-        }
 
 
     }
-
+    private fun getAddressFromCoordinates(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        return try {
+            val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                addresses[0].getAddressLine(0) ?: "Alamat tidak ditemukan"
+            } else {
+                "Alamat tidak ditemukan"
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            "Gagal mendapatkan alamat"
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTambahBinding.inflate(inflater, container, false)
-
         binding.buttonmedia.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(com.example.aplikasi_zulham.R.id.Frame, CameraFragment())
-                .addToBackStack(null)
-                .commit()
-
-
-
-        }
-
-        binding.buttonlokasi.setOnClickListener {
-            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
-            bottomNav.visibility = View.GONE
-
-            parentFragmentManager.beginTransaction()
-                .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
-                .addToBackStack(null)
-                .commit()
+//            parentFragmentManager.beginTransaction()
+//                .replace(com.example.aplikasi_zulham.R.id.Frame, CameraFragment())
+//                .addToBackStack(null)
+//                .commit()
+            val bottomSheet = MyBottomSheetFragment()
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
 
 
         }
+
+//        binding.buttonlokasi.setOnClickListener {
+//            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+//            bottomNav.visibility = View.GONE
+//
+//            parentFragmentManager.beginTransaction()
+//                .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
+//                .addToBackStack(null)
+//                .commit()
+//
+//
+//        }
 
         return binding.root
     }
@@ -209,6 +210,7 @@ class TambahFragment : Fragment() {
     }
 
     private fun initRecycler(){
+
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -224,8 +226,11 @@ class TambahFragment : Fragment() {
             datalaporan.Image = null
         }
 
-        adapterBerita = AdapterMedia(ArrayList(adapter), { SelectedImage ->
+        adapterBerita = AdapterMedia(ArrayList(adapter), { SelectedImage ,_->
 
+            if (SelectedImage.Gambar.isNotEmpty()) {
+                binding.img.setImageBitmap(resizeBitmap(SelectedImage.Gambar.last(), 800, 800))
+            }
 
         }, { aduan, position ->
             val updatedList = datalaporan.media.value?.toMutableList()
@@ -234,10 +239,13 @@ class TambahFragment : Fragment() {
             datalaporan.media.value = updatedList as ArrayList<Aduan>?
 
             adapterBerita.notifyItemRemoved(position)
+
             if (datalaporan.media.value!!.isNullOrEmpty()) {
                 binding.recyclerView.visibility = View.GONE
+                binding.img.visibility = View.GONE
             } else {
                 binding.recyclerView.visibility = View.VISIBLE
+                binding.img.visibility = View.VISIBLE
 
             }
 
@@ -295,6 +303,26 @@ class TambahFragment : Fragment() {
 //
 //    }
 
+    override fun onResume() {
+        super.onResume()
+        if (datalaporan.Image != null) {
+            binding.img.setImageBitmap(resizeBitmap(datalaporan.Image!!,800,800))
+            initRecycler()
+        }
+        if ( datalaporan.media.value!!.isNotEmpty() ) {
+
+            binding.recyclerView.visibility = View.VISIBLE
+
+            binding.img.visibility = View.VISIBLE
+
+
+        } else {
+
+            binding.recyclerView.visibility = View.GONE
+            binding.img.visibility = View.GONE
+
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
