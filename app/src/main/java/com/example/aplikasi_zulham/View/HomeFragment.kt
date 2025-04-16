@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.aplikasi_zulham.Adapter.AdapterBerita
+import com.example.aplikasi_zulham.AduanTerbaru
 import com.example.aplikasi_zulham.Model.Laporan
+import com.example.aplikasi_zulham.PembersihanUmum
 import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
@@ -35,12 +37,22 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         Init()
+
+        binding.pembersihanumum.setOnClickListener {
+            replaceFragment(PembersihanUmum())
+        }
         binding.aduanterterbaru.setOnClickListener {
             Log.i("Debug", "Menekan");
         }
         return binding.root
     }
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.Frame, fragment)
 
+            .addToBackStack(null)
+            .commit()
+    }
     private fun Init() {
        // datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java]
 

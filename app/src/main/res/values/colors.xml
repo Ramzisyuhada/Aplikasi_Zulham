@@ -11,5 +11,5 @@
     <color name="bg">#FFF8F8</color>
     <color name="alertbiru">#DAE9FB</color>
     <color name="iconbiru">#2C3A57</color>
-
+<color name="warnabintang">#FF7F00</color>
 </resources>

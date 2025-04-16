@@ -40,6 +40,11 @@ android {
 }
 
 dependencies {
+    //Api
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")  // Untuk konversi JSON ke objek Kotlin
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation( "org.osmdroid:osmdroid-android:6.1.14")
 

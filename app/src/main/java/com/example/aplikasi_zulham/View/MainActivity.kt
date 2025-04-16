@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper.setNetworkListener(this)
         networkHelper.startNetworkCallback()
 
-        // Tampilkan fragment default
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
         }
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
             when (item.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())
                 R.id.add -> replaceFragment(TutorialFragment())
-                R.id.user -> replaceFragment(GpsFragment())
+                R.id.user -> replaceFragment(UserFragment())
             }
             true
         }

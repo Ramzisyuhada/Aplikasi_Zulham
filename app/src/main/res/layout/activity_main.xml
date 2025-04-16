@@ -52,6 +52,8 @@
         android:layout_marginBottom="44dp"
         android:layout_marginHorizontal="19dp"
         app:itemIconSize="25dp"
+        app:itemBackground="@drawable/bottom_nav_item_background"
+
         app:itemIconTint="@color/nav_item_color"
         app:itemTextColor="@color/nav_item_color"
         app:layout_constraintStart_toStartOf="parent"
