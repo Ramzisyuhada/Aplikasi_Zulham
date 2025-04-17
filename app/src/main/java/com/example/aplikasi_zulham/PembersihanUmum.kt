@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
+import androidx.appcompat.app.AlertDialog
+import com.example.aplikasi_zulham.databinding.FragmentPembersihanUmumBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +21,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PembersihanUmum : Fragment() {
+
+
+    private var _binding: FragmentPembersihanUmumBinding? = null
+    private val binding get() = _binding!!
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,8 +43,46 @@ class PembersihanUmum : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentPembersihanUmumBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pembersihan_umum, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.bar5.progress = 80
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.card_review, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+
+        binding.ButtonUlasanID.setOnClickListener {
+            val batalbutton = dialogView.findViewById<Button>(R.id.DialogBtnClose1)
+            val LanjutButton = dialogView.findViewById<Button>(R.id.LanjutBtnID)
+            val dialogSucces = LayoutInflater.from(requireContext()).inflate(R.layout.alertdialog_succes_ulasan, null)
+            val dialog1 = AlertDialog.Builder(requireContext())
+                .setView(dialogSucces)
+                .create()
+
+            LanjutButton.setOnClickListener {
+
+                dialog1.show()
+                val buttonclose = dialogSucces.findViewById<Button>(R.id.ok)
+                buttonclose.setOnClickListener {
+                    dialog1.dismiss()
+                }
+                dialog.dismiss()
+            }
+            batalbutton.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+
+
     }
 
     companion object {

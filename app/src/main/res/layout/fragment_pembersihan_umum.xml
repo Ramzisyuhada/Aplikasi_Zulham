@@ -59,15 +59,18 @@
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
-
-                        <ImageView
+                        <ProgressBar
+                            android:id="@+id/bar5"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
-                            android:background="@drawable/style_bar_bintang" />
-
+                            android:layout_marginStart="12dp"
+                            android:progress="50"
+                            android:max="100"
+                            android:progressDrawable="@drawable/style_bar_bintang" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -81,14 +84,16 @@
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
-
-                        <ImageView
+                        <ProgressBar
+                            android:id="@+id/bar4"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
-                            android:background="@drawable/style_bar_bintang" />
-
+                            android:layout_marginStart="12dp"
+                            android:progress="50"
+                            android:max="100"
+                            android:progressDrawable="@drawable/style_bar_bintang" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -103,15 +108,18 @@
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
-
-                        <ImageView
+                        <ProgressBar
+                            android:id="@+id/bar3"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
-                            android:background="@drawable/style_bar_bintang" />
-
+                            android:layout_marginStart="12dp"
+                            android:progress="50"
+                            android:max="100"
+                            android:progressDrawable="@drawable/style_bar_bintang" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -125,15 +133,18 @@
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
-
-                        <ImageView
+                        <ProgressBar
+                            android:id="@+id/bar2"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
-                            android:background="@drawable/style_bar_bintang" />
-
+                            android:layout_marginStart="12dp"
+                            android:progress="50"
+                            android:max="100"
+                            android:progressDrawable="@drawable/style_bar_bintang" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,21 +158,25 @@
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="bold" />
-
-                        <ImageView
+                        <ProgressBar
+                            android:id="@+id/bar1"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
-                            android:background="@drawable/style_bar_bintang" />
-
+                            android:layout_marginStart="12dp"
+                            android:progress="50"
+                            android:max="100"
+                            android:progressDrawable="@drawable/style_bar_bintang" />
                     </LinearLayout>
+
                     <!-- Copy dan ubah text "5" menjadi "4", "3", dst untuk yang lain -->
 
                 </LinearLayout>
 
                 <!-- Right Side: Jumlah -->
                 <LinearLayout
+
                     android:id="@+id/jumlah"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

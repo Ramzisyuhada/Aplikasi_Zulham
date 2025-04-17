@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper.setNetworkListener(this)
         networkHelper.startNetworkCallback()
 
+        alertDialog
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
         }
