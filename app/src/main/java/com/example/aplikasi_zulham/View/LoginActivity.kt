@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityLoginBinding
@@ -29,6 +30,15 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         binding.click.setOnClickListener {
             if (NetworkHelper.isConnected(this)) {
                 val intent = Intent(this, register::class.java)
+                startActivity(intent)
+            } else {
+                alertDialog.startLoadingDialogJaringan()
+            }
+        }
+
+        binding.ForgotPasswordID.setOnClickListener {
+            if (NetworkHelper.isConnected(this)) {
+                val intent = Intent(this, ForgetPassword::class.java)
                 startActivity(intent)
             } else {
                 alertDialog.startLoadingDialogJaringan()
