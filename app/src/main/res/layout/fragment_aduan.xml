@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF8F8"
-    tools:context=".AduanTerbaru">
+    tools:context=".View.Aduan">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,42 +34,46 @@
 
             <LinearLayout
                 android:id="@+id/DesripsiAduanbg"
-                app:layout_constraintTop_toBottomOf="@id/image_slider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_slider">
 
                 <TextView
                     android:id="@+id/NamapenggunaID"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="26dp"
+                    android:layout_marginTop="16dp"
                     android:autoSizeMaxTextSize="24sp"
                     android:autoSizeMinTextSize="14sp"
                     android:autoSizeStepGranularity="2sp"
                     android:autoSizeTextType="uniform"
                     android:text="Ramzi syuhada"
-                    android:textSize="24dp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/DeskripsiTourisgGuidIDs"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="26dp"
-                    android:layout_marginRight="27dp"
-                    android:autoSizeMaxTextSize="34sp"
-                    android:autoSizeMinTextSize="18sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:autoSizeTextType="uniform"
-                    android:paddingBottom="25dp"
-                    android:text="Kuta, salah satu destinasi wisata utama di Bali, kini menghadapi beberapa masalah, seperti kebersihan pantai yang terganggu oleh sampah, kemacetan lalu lintas di sekitar Jalan Legian, serta masalah keamanan dan ketertiban umum, seperti pencopetan. Masalah-masalah ini mulai mengurangi kenyamanan wisatawan dan warga lokal, sehingga memerlukan perhatian serius dari pemerintah dan pengelola pariwisata untuk menjaga kualitas kawasan ini." />
+
+                android:layout_marginLeft="26dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="27dp"
+               android:textSize="18sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:text="Kuta, salah satu destinasi wisata utama di Bali, kini menghadapi beberapa masalah, seperti kebersihan pantai yang terganggu oleh sampah, kemacetan lalu lintas di sekitar Jalan Legian, serta masalah keamanan dan ketertiban umum, seperti pencopetan. Masalah-masalah ini mulai mengurangi kenyamanan wisatawan dan warga lokal, sehingga memerlukan perhatian serius dari pemerintah dan pengelola pariwisata untuk menjaga kualitas kawasan ini." />
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/aduan1"
@@ -94,8 +98,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="18sp"
+                    android:textSize="16sp"
                         android:autoSizeStepGranularity="2sp"
                         android:autoSizeTextType="uniform"
                         android:text="NOMOR ADUAN"
@@ -114,17 +117,16 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="26dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="32dp"
-                        android:autoSizeMaxTextSize="24sp"
-                        android:autoSizeMinTextSize="18sp"
+                        android:textSize="16sp"
                         android:autoSizeStepGranularity="2sp"
                         android:autoSizeTextType="uniform"
                         android:text="Tanggal"

@@ -1,15 +1,23 @@
 package com.example.aplikasi_zulham.Model
 
-class Cuaca {
-    var Suhu  = 0
-    var Tanggal = ""
-    var Jam = ""
-    var Tempat = ""
+import android.graphics.Bitmap
+import com.google.gson.annotations.SerializedName
 
-    constructor(Suhu: Int, Tanggal: String, Jam: String, Tempat: String) {
+class Cuaca {
+
+     var Suhu: Int = 0
+    var Desc : String = ""
+    var Tanggal: String = ""
+    var Icon: String  = ""
+    var Jam: String = ""
+
+    constructor(Suhu: Int, Tanggal: String, Jam: String, Icon: String,Desc : String) {
         this.Suhu = Suhu
         this.Tanggal = Tanggal
         this.Jam = Jam
-        this.Tempat = Tempat
+        this.Icon = Icon
+        this.Desc = Desc
     }
+
+    constructor()
 }

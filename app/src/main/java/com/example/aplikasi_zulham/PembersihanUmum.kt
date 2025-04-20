@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import androidx.appcompat.app.AlertDialog
+import com.example.aplikasi_zulham.View.HomeFragment
 import com.example.aplikasi_zulham.databinding.FragmentPembersihanUmumBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,8 +54,11 @@ class PembersihanUmum : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        bottomNav.visibility = View.GONE
         binding.bar5.progress = 80
+        val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
+        text.text = "SKOR"
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.card_review, null)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -73,6 +79,8 @@ class PembersihanUmum : Fragment() {
                 val buttonclose = dialogSucces.findViewById<Button>(R.id.ok)
                 buttonclose.setOnClickListener {
                     dialog1.dismiss()
+                    replaceFragment(HomeFragment())
+
                 }
                 dialog.dismiss()
             }
@@ -84,7 +92,13 @@ class PembersihanUmum : Fragment() {
 
 
     }
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.Frame, fragment)
 
+            .addToBackStack(null)
+            .commit()
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

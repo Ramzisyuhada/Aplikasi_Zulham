@@ -200,12 +200,18 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginTop="8dp">
+                        <RatingBar
+                            android:isIndicator="true"
+                            android:stepSize="0.5"
+                             android:rating="4.5"
+                            android:id="@+id/ratingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:numStars="5"
+                            android:progressTint="@color/warnabintang"
+                             />
 
-                        <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/baseline_star_24" />
-                        <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/baseline_star_24" />
-                        <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/baseline_star_24" />
-                        <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/baseline_star_24" />
-                        <ImageView android:layout_width="11dp" android:layout_height="11dp" android:src="@drawable/baseline_star_24" />
                     </LinearLayout>
 
                     <!-- Jumlah ulasan -->

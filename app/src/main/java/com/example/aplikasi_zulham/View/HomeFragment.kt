@@ -6,20 +6,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.aplikasi_zulham.Adapter.AdapterBerita
-import com.example.aplikasi_zulham.AduanTerbaru
+import com.example.aplikasi_zulham.ListAduan
+import com.example.aplikasi_zulham.MapInteractive
 import com.example.aplikasi_zulham.Model.Laporan
 import com.example.aplikasi_zulham.PembersihanUmum
 import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.widget.SearchView
 
 class HomeFragment : Fragment() {
 
@@ -42,8 +44,13 @@ class HomeFragment : Fragment() {
             replaceFragment(PembersihanUmum())
         }
         binding.aduanterterbaru.setOnClickListener {
-            Log.i("Debug", "Menekan");
+            replaceFragment(ListAduan())
         }
+        binding.Weather.setOnClickListener {
+            replaceFragment(CuacaView())
+        }
+
+
         return binding.root
     }
     private fun replaceFragment(fragment: Fragment) {
@@ -54,12 +61,14 @@ class HomeFragment : Fragment() {
             .commit()
     }
     private fun Init() {
-       // datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java]
 
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
+        binding.zone.setOnClickListener {
+            replaceFragment(MapInteractive())
+        }
         beritaList.add(
             Laporan(
                 "Pungutan Liar di Kawasan Tahura",
@@ -114,13 +123,30 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
+        text.text = "Laporin"
+        bottomNav.visibility = View.VISIBLE
 
         val list = ArrayList<SlideModel>()
         list.add(SlideModel(R.drawable.tahura1, ScaleTypes.FIT))
         list.add(SlideModel(R.drawable.tahura2, ScaleTypes.FIT))
         binding.imageSlider.setImageList(list, ScaleTypes.FIT)
 
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null && query.isNotEmpty()) {
+                    replaceFragment(Aduan())
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+
+        })
 
     }
 

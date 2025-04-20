@@ -90,12 +90,27 @@
             android:paddingBottom="12dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    
+    <TextView
+        android:clickable="true"
+
+        android:textStyle="bold"
+        android:id="@+id/ForgotPasswordID"
+        android:layout_marginVertical="13dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/loginpassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Lupa Password"
+        android:textAlignment="textEnd"
+        />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/loginpassword"
+        app:layout_constraintTop_toBottomOf="@id/ForgotPasswordID"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Masuk"

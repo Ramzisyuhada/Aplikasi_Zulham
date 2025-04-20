@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+
+    implementation ("com.caverock:androidsvg:1.4")
+
     //Api
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -47,6 +50,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation( "org.osmdroid:osmdroid-android:6.1.14")
+    implementation(libs.volley)
 
     val camerax_version = "1.3.0"
 
