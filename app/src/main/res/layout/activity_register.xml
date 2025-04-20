@@ -163,11 +163,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/style_editextkosong"
             android:inputType="textPassword"
-            android:textSize="16sp"
             android:paddingStart="49dp"
-            android:paddingEnd="16dp"
             android:paddingTop="12dp"
-            android:paddingBottom="12dp"/>
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
