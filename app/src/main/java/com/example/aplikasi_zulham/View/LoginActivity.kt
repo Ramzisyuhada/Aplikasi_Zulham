@@ -1,7 +1,9 @@
 package com.example.aplikasi_zulham.View
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.aplikasi_zulham.ForgetPassword
@@ -26,7 +28,12 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper = NetworkHelper(this)
         networkHelper.setNetworkListener(this)
         networkHelper.startNetworkCallback()
-
+        val kategori = arrayOf("kuta", "bukit merese", "pantai", "sirkuit mandalika")
+        val adapter = ArrayAdapter(
+            this, R.layout.simple_spinner_item, kategori
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.PilihanDestinasi.adapter = adapter
         binding.click.setOnClickListener {
             if (NetworkHelper.isConnected(this)) {
                 val intent = Intent(this, register::class.java)
@@ -60,6 +67,10 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             binding.loginusername.error = null
             val intent = Intent(this, MainActivity::class.java)
+
+            intent.putExtra("username", username)
+            startActivity(intent)
+
             startActivity(intent)
         }
     }

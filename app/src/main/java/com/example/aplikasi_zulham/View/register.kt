@@ -21,6 +21,7 @@ class register : AppCompatActivity() , NetworkHelper.NetworkListener {
         networkHelper.startNetworkCallback()
 
         setContentView(R.layout.activity_register)
+
         binding.Registerbutton.setOnClickListener {
             val nama = binding.registerusername.toString()
             val email = binding.registeremail.toString()

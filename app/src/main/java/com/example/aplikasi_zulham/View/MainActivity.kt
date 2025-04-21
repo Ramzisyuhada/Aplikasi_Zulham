@@ -1,6 +1,7 @@
 package com.example.aplikasi_zulham.View
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,18 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val username = intent.getStringExtra("username") ?: ""
+        if (username == "admin"){
+            replaceFragment(Admin())
+            Log.d("Role",username)
 
+            binding.NavButton.visibility = View.GONE
+        }else{
+            binding.NavButton.visibility = View.VISIBLE
+            if (savedInstanceState == null) {
+                replaceFragment(HomeFragment())
+            }
+        }
         // Inisialisasi helper
         networkHelper = NetworkHelper(this)
         alertDialog = ViewModelAlert(this)
@@ -36,9 +48,7 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper.startNetworkCallback()
 
         alertDialog
-        if (savedInstanceState == null) {
-            replaceFragment(HomeFragment())
-        }
+
 
         // Navigasi bawah
         binding.NavButton.setOnItemSelectedListener { item ->
