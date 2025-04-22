@@ -14,6 +14,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasi_zulham.Adapter.AdapterMedia
 import com.example.aplikasi_zulham.Model.Aduan
 import com.example.aplikasi_zulham.Model.Laporan
+import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.example.aplikasi_zulham.util.GpsHelper
@@ -87,13 +90,25 @@ class TambahFragment : Fragment() {
 //            bottomNav.visibility = View.VISIBLE
 //            bottomNav.selectedItemId = R.id.home
 //        }
+        val dialogSucces = LayoutInflater.from(requireContext()).inflate(R.layout.alertdialog_succes_ulasan, null)
+
+        val dialog1 = AlertDialog.Builder(requireContext())
+            .setView(dialogSucces)
+            .create()
 
         binding.Tambah.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
-                .addToBackStack(null)
-                .commit()
-            datalaporan.clear()
+
+            dialog1.show()
+            dialogSucces.findViewById<TextView>(R.id.TextDialog1).text = "Terima kasih atas aduan Anda."
+            dialogSucces.findViewById<Button>(R.id.ok).setOnClickListener {
+                dialog1.dismiss()
+                parentFragmentManager.beginTransaction()
+                    .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
+                    .addToBackStack(null)
+                    .commit()
+                datalaporan.clear()
+            }
+
 
 
         }

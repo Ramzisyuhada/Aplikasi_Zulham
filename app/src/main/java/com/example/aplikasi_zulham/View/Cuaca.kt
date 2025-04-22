@@ -71,6 +71,7 @@ class CuacaView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
         text.text = "Cuaca"

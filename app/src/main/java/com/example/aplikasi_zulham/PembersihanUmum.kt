@@ -47,7 +47,8 @@ class PembersihanUmum : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPembersihanUmumBinding.inflate(inflater, container, false)
-
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        bottomNav.visibility = View.GONE
         // Inflate the layout for this fragment
         return binding.root
     }
