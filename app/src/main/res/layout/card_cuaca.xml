@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
@@ -11,14 +11,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:padding="16dp">
 
         <!-- Nama Tempat -->
         <TextView
-            android:id="@+id/NamaTempatID"
+            android:id="@+id/HariID"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Kuta"
+            android:text="Jum'at"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textAlignment="center"
@@ -29,51 +30,36 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
+        <TextView
+            android:layout_marginTop="10dp"
+            android:text="10.00"
+            android:id="@+id/JamID"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="24sp"
+            app:layout_constraintTop_toBottomOf="@id/HariID"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
         <!-- Icon Cuaca -->
         <ImageView
+
+            android:layout_marginTop="10dp"
             android:id="@+id/IconCuacaID"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toBottomOf="@id/NamaTempatID"
+            app:layout_constraintTop_toBottomOf="@id/JamID"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.5"
             tools:srcCompat="@drawable/cloudy" />
+        
 
-        <!-- Derajat -->
-        <TextView
-                android:id="@+id/DerajatID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25°C"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="12sp"
-            android:autoSizeMaxTextSize="24sp"
-            app:layout_constraintTop_toBottomOf="@id/IconCuacaID"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
 
-        <!--Tanggal Dan jam -->
-
-        <TextView
-            android:id="@+id/TanggalDanJamID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Senin April 14 | 10.00 AM"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="12sp"
-            android:autoSizeMaxTextSize="24sp"
-            app:layout_constraintTop_toBottomOf="@id/DerajatID"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -50,7 +50,7 @@ class MapInteractive : Fragment() {
             PreferenceManager.getDefaultSharedPreferences(requireContext())
         )
         Configuration.getInstance().userAgentValue = requireContext().packageName
-
+    
         setupMap()
     }
     private lateinit var tapMarker: Marker

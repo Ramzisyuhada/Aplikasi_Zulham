@@ -41,6 +41,11 @@ android {
 
 dependencies {
 
+    // chart
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
     implementation ("com.caverock:androidsvg:1.4")
 
     //Api
