@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.aplikasi_zulham.Ppt
 
 import com.example.aplikasi_zulham.R
+import com.example.aplikasi_zulham.databinding.FragmentEcoTourismeGuideBinding
+import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * A simple [Fragment] subclass.
@@ -17,9 +21,12 @@ class EcoTourismeGuide : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var _binding: FragmentEcoTourismeGuideBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -27,8 +34,22 @@ class EcoTourismeGuide : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_eco_tourisme_guide, container, false)
+        _binding = FragmentEcoTourismeGuideBinding.inflate(inflater, container, false)
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+
+        bottomNav.visibility = View.GONE
+        binding.PptButtonID.setOnClickListener {
+            replaceFragment(Ppt())
+        }
+        return binding.root
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.Frame, fragment)
+
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {

@@ -50,6 +50,10 @@ class HomeFragment : Fragment() {
             replaceFragment(CuacaView())
         }
 
+        binding.eco.setOnClickListener {
+            replaceFragment(EcoTourismeGuide())
+        }
+
 
         return binding.root
     }
@@ -116,16 +120,16 @@ class HomeFragment : Fragment() {
         val limitedList = beritaList.take(3)
 
         adapterBerita = AdapterBerita(ArrayList(limitedList)) { berita ->
-            // Handle klik berita (jika perlu)
         }
         binding.recyclerView.adapter = adapterBerita
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
         text.text = "Laporin"
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+
         bottomNav.visibility = View.VISIBLE
 
         val list = ArrayList<SlideModel>()
