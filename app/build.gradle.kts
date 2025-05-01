@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     // chart
 

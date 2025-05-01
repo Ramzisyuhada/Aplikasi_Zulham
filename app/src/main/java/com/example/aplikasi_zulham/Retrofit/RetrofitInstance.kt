@@ -1,4 +1,4 @@
-package com.example.aplikasi_zulham
+package com.example.aplikasi_zulham.Retrofit
 
 import com.example.aplikasi_zulham.Interface.ApiService
 import retrofit2.Retrofit

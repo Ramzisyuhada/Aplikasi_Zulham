@@ -4,14 +4,8 @@
     import android.graphics.BitmapFactory
     import android.util.Log
     import com.example.aplikasi_zulham.Model.Cuaca
-    import com.example.aplikasi_zulham.RetrofitInstance
-    import org.jetbrains.annotations.Debug
-    import org.json.JSONObject
-    import retrofit2.Retrofit
-    import retrofit2.converter.gson.GsonConverterFactory
-    import java.io.BufferedReader
+    import com.example.aplikasi_zulham.Retrofit.RetrofitInstance
     import java.io.InputStream
-    import java.io.InputStreamReader
     import java.net.HttpURLConnection
     import java.net.URL
     import android.graphics.Canvas

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.aplikasi_zulham.Ppt
 
 import com.example.aplikasi_zulham.R
+import com.example.aplikasi_zulham.Video
 import com.example.aplikasi_zulham.databinding.FragmentEcoTourismeGuideBinding
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,6 +41,9 @@ class EcoTourismeGuide : Fragment() {
         bottomNav.visibility = View.GONE
         binding.PptButtonID.setOnClickListener {
             replaceFragment(Ppt())
+        }
+        binding.VideoButtonID.setOnClickListener {
+            replaceFragment(Video())
         }
         return binding.root
     }
