@@ -1,7 +1,9 @@
 package com.example.aplikasi_zulham.Adapter
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.aplikasi_zulham.Model.VideoModel
 import com.example.aplikasi_zulham.databinding.ItemVideoBinding
 
@@ -21,7 +23,11 @@ class VideoAdapter(
         val video = videos[position]
         holder.binding.titleTextView.text = video.title
         holder.binding.channelTextView.text = video.channel
-        // Kalau mau load thumbnail pakai Glide/Picasso nanti
+
+        // Load thumbnail from URL using Glide
+        Glide.with(holder.itemView.context)
+            .load(video.thumbnailUrl)
+            .into(holder.binding.thumbnailImageView)
 
         holder.itemView.setOnClickListener {
             onVideoClick(video)

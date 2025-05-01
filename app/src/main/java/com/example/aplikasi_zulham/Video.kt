@@ -43,15 +43,15 @@ class Video : Fragment() {
 
         val videos = listOf(
             VideoModel(
-                "Judul 1",
-                "Channel 1",
-                "https://linkgambar.com/thumb1.jpg",
-                "https://youtu.be/xOxwURrI7KA?si=pDXPWW0VMZMkmu_7"
+                "Part 1 - Reviu Simulator Tank - asharilabs",
+                "Galih Ashari R",
+                "https://img.youtube.com/vi/xOxwURrI7KA/hqdefault.jpg",
+                "https://youtu.be/9gvdO6r4Vjg?si=DymDU5gvljHQnRhc"
             ),
             VideoModel(
-                "Judul 2",
-                "Channel 2",
-                "https://linkgambar.com/thumb2.jpg",
+                "Part 2 - Persiapan Unity 3D",
+                "Galih Ashari R",
+                "https://img.youtube.com/vi/xOxwURrI7KA/hqdefault.jpg",
                 "https://youtu.be/xOxwURrI7KA?si=ypSAknhbh5pWLayB"
             )
         )
@@ -67,41 +67,71 @@ class Video : Fragment() {
 
         return binding.root
     }
+
     private fun showPopup(videoId: String) {
-        // Inflate the popup layout
         val inflater = LayoutInflater.from(requireContext())
         val popupView = inflater.inflate(R.layout.fragment_popup_video, null)
 
-        // Initialize the YouTubePlayerView inside the popup layout
-        val popupYouTubePlayerView: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView =
-            popupView.findViewById(R.id.popupVideoView)
+        val popupYouTubePlayerView = popupView.findViewById<com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>(R.id.popupVideoView)
 
-        // Create the PopupWindow with the specified layout parameters
-        val popupWindow = PopupWindow(popupView,
+        val popupWindow = PopupWindow(
+            popupView,
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.MATCH_PARENT, // full screen
+            true // focusable
+        )
 
-        // Set the background of the PopupWindow to be transparent (or another color)
+        // Agar background hitam terlihat
         popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        // Allow the popup to be dismissed if clicked outside
         popupWindow.isOutsideTouchable = true
         popupWindow.isFocusable = true
 
-        // Show the PopupWindow at the center of the screen
+        // Tampilkan di tengah
         popupWindow.showAtLocation(binding.root, android.view.Gravity.CENTER, 0, 0)
 
-        // Register lifecycle observer for the YouTubePlayer inside the popup
         lifecycle.addObserver(popupYouTubePlayerView)
 
-        // Set the YouTubePlayerListener for the popup player
         popupYouTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(player: YouTubePlayer) {
-                // Load the selected video when the player is ready
                 player.loadVideo(videoId, 0f)
             }
         })
     }
+
+//    private fun showPopup(videoId: String) {
+//        // Inflate the popup layout
+//        val inflater = LayoutInflater.from(requireContext())
+//        val popupView = inflater.inflate(R.layout.fragment_popup_video, null)
+//
+//        // Initialize the YouTubePlayerView inside the popup layout
+//        val popupYouTubePlayerView: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView =
+//            popupView.findViewById(R.id.popupVideoView)
+//
+//        // Create the PopupWindow with the specified layout parameters
+//        val popupWindow = PopupWindow(popupView,
+//            ViewGroup.LayoutParams.MATCH_PARENT,
+//            ViewGroup.LayoutParams.WRAP_CONTENT)
+//
+//        // Set the background of the PopupWindow to be transparent (or another color)
+//        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//
+//        // Allow the popup to be dismissed if clicked outside
+//        popupWindow.isOutsideTouchable = true
+//        popupWindow.isFocusable = true
+//
+//        // Show the PopupWindow at the center of the screen
+//        popupWindow.showAtLocation(binding.root, android.view.Gravity.CENTER, 0, 0)
+//
+//        lifecycle.addObserver(popupYouTubePlayerView)
+//
+//        // Set the YouTubePlayerListener for the popup player
+//        popupYouTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+//            override fun onReady(player: YouTubePlayer) {
+//                // Load the selected video when the player is ready
+//                player.loadVideo(videoId, 0f)
+//            }
+//        })
+//    }
 
     private fun extractVideoId(url: String): String? {
         return when {

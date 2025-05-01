@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.aplikasi_zulham.View.Aduan
+import com.example.aplikasi_zulham.databinding.FragmentAduanKuBinding
 import com.example.aplikasi_zulham.databinding.FragmentListtAduanBinding
-import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,13 +19,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListtAduan.newInstance] factory method to
+ * Use the [AduanKu.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListAduan : Fragment() {
-    private var _binding: FragmentListtAduanBinding? = null
+class AduanKu : Fragment() {
+    private var _binding: FragmentAduanKuBinding? = null
     private val binding get() = _binding!!
 
+    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -41,8 +42,7 @@ class ListAduan : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentListtAduanBinding.inflate(inflater,container,false)
-
+        _binding = FragmentAduanKuBinding.inflate(inflater,container,false)
 
         for (i in 1..5) {
             val view = inflater.inflate(R.layout.card_aduan, binding.cardContainer, false)
@@ -66,7 +66,7 @@ class ListAduan : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
-        text.text = "Aduan Terbaru"
+        text.text = "Aduan Ku"
         bottomNav.visibility = View.GONE
     }
     companion object {
@@ -76,9 +76,16 @@ class ListAduan : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ListtAduan.
+         * @return A new instance of fragment AduanKu.
          */
         // TODO: Rename and change types and number of parameters
-
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            AduanKu().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }
