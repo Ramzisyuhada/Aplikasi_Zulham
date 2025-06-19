@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.aplikasi_zulham.Controller.UserController
 import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
+import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityLoginBinding
 
@@ -16,7 +18,7 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var networkHelper: NetworkHelper
     private lateinit var alertDialog: ViewModelAlert
-
+    private val userController = UserController()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -54,11 +56,14 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
         binding.loginButton.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+            val hasil = userController.Login(User(username,password),window.decorView.rootView)
+//            if (username.isEmpty() && password.isEmpty()) {
+//                binding.loginpassword.error = "Password Tidak Boleh Kosong"
+//                binding.loginusername.error = "Nama Tidak Boleh Kosong"
+//                return@setOnClickListener
+//            }
 
-            if (username.isEmpty()) {
-                binding.loginusername.error = "Nama Tidak Boleh Kosong"
-                return@setOnClickListener
-            }
 
             if (!NetworkHelper.isConnected(this)) {
                 alertDialog.startLoadingDialogJaringan()
@@ -67,11 +72,13 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             binding.loginusername.error = null
             val intent = Intent(this, MainActivity::class.java)
+            if (hasil == 1){
+                intent.putExtra("username", username)
+                startActivity(intent)
 
-            intent.putExtra("username", username)
-            startActivity(intent)
+            }
 
-            startActivity(intent)
+
         }
     }
 

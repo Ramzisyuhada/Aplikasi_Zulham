@@ -8,7 +8,6 @@ class Aduan   {
     var  Gambar  = ArrayList<Bitmap>()
       var Lokasi : Alamat = Alamat()
       var DeskripsiMasalah : String = ""
-
     constructor()
     constructor(
         Gambar: ArrayList<Bitmap>,
