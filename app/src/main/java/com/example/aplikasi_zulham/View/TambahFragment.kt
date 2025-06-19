@@ -166,6 +166,7 @@ class TambahFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTambahBinding.inflate(inflater, container, false)
+
         binding.buttonmedia.setOnClickListener {
 //            parentFragmentManager.beginTransaction()
 //                .replace(com.example.aplikasi_zulham.R.id.Frame, CameraFragment())
@@ -254,7 +255,7 @@ class TambahFragment : Fragment() {
         })
 
         datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
-            adapterBerita.updateData(updatedList.take(5))
+            adapterBerita.updateData(updatedList.take(3))
         }
 
         binding.recyclerView.adapter = adapterBerita
@@ -265,7 +266,6 @@ class TambahFragment : Fragment() {
         super.onResume()
         val mediaList = datalaporan.media.value ?: ArrayList()
 
-        // Jika ada media baru, tampilkan thumbnail-nya dan setup Recycler
         if (datalaporan.Image != null) {
             val imageAlreadyAdded = datalaporan.media.value?.any { aduan ->
                 aduan.Gambar.isNotEmpty() && aduan.Gambar.last().sameAs(datalaporan.Image)
