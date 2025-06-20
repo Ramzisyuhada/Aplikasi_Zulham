@@ -254,22 +254,15 @@ class TambahFragment : Fragment() {
             datalaporan.media.value = updatedList as ArrayList<Aduan>?
 
             adapterBerita.notifyItemRemoved(position)
-            datalaporan.Video?.name?.let { Log.i("Format File", it.substringAfter('.', "")) }
 
-            if(binding.video != null){
-                binding.video.visibility = View.VISIBLE
+            if (datalaporan.media.value!!.isNullOrEmpty()) {
+                binding.recyclerView.visibility = View.GONE
+                binding.img.visibility = View.GONE
+            } else {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.img.visibility = View.VISIBLE
-            }else {
-                if (datalaporan.media.value!!.isNullOrEmpty()) {
-                    binding.recyclerView.visibility = View.GONE
-                    binding.img.visibility = View.GONE
-                } else {
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.img.visibility = View.VISIBLE
-                }
-            }
 
+            }
 
         })
         datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
@@ -278,6 +271,52 @@ class TambahFragment : Fragment() {
         binding.recyclerView.adapter = adapterBerita
 
     }
+//    private fun initRecycler() {
+//        binding.recyclerView.setHasFixedSize(true)
+//        binding.recyclerView.layoutManager =
+//            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//        Log.i("Aduan", "${ datalaporan.media.value?.count()}")
+//
+//         resizedBitmap = datalaporan.Image?.let { resizeBitmap(it, 800, 800) }
+//
+//        val currentList = datalaporan.media.value ?: ArrayList()
+//
+//        val isAlreadyAdded = currentList.any { aduan ->
+//            aduan.Gambar.any { it.sameAs(resizedBitmap) }
+//        }
+//        if (!isAlreadyAdded && resizedBitmap != null) {
+//            val newAduan = Aduan()
+//            newAduan.Gambar.add(resizedBitmap!!)
+//            currentList.add(newAduan)
+//            datalaporan.media.value = currentList
+//        }
+//
+//        val limitedList = datalaporan.media.value?.take(5)
+//        adapterBerita = AdapterMedia(ArrayList(limitedList), { selectedImage ->
+//        }, { aduan,position ->
+//            val updatedList = datalaporan.media.value?.toMutableList()
+//
+//            updatedList?.removeAt(position)
+//            datalaporan.media.value = updatedList as ArrayList<Aduan>?
+//
+//
+//            if (updatedList.isNullOrEmpty()) {
+//                binding.recyclerView.visibility = View.GONE
+//            } else {
+//                binding.recyclerView.visibility = View.VISIBLE
+//            }
+//
+//            adapterBerita.notifyItemRemoved(position)
+//
+//        })
+//        datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
+//            adapterBerita.updateData(updatedList.take(5))
+//        }
+//
+//
+//        binding.recyclerView.adapter = adapterBerita
+//
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -286,13 +325,17 @@ class TambahFragment : Fragment() {
             initRecycler()
         }
         if ( datalaporan.media.value!!.isNotEmpty() ) {
+
             binding.recyclerView.visibility = View.VISIBLE
+
             binding.img.visibility = View.VISIBLE
-            binding.video.visibility = View.VISIBLE
+
+
         } else {
 
             binding.recyclerView.visibility = View.GONE
             binding.img.visibility = View.GONE
+
         }
     }
 

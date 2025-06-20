@@ -22,6 +22,7 @@ import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.widget.SearchView
+import com.example.aplikasi_zulham.AduanKu
 
 class HomeFragment : Fragment() {
 
@@ -52,6 +53,10 @@ class HomeFragment : Fragment() {
 
         binding.eco.setOnClickListener {
             replaceFragment(EcoTourismeGuide())
+        }
+
+        binding.aduan.setOnClickListener {
+            replaceFragment(AduanKu())
         }
 
 

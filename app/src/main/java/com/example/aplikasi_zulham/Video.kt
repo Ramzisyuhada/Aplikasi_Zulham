@@ -29,6 +29,16 @@ class Video : Fragment() {
     ): View {
         _binding = FragmentVideoBinding.inflate(inflater, container, false)
 
+//      lifecycle.addObserver(binding.videoView) // penting: daftarin lifecycle player
+//
+//        // Setup YouTube Player Listener
+//        binding.videoView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+//            override fun onReady(player: YouTubePlayer) {
+//                youTubePlayer = player
+//            }
+//        })
+
+        // Setup RecyclerView
         binding.playlistRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val videos = listOf(
@@ -58,12 +68,15 @@ class Video : Fragment() {
         return binding.root
     }
     private fun showPopup(videoId: String) {
+        // Inflate the popup layout
         val inflater = LayoutInflater.from(requireContext())
         val popupView = inflater.inflate(R.layout.fragment_popup_video, null)
 
+        // Initialize the YouTubePlayerView inside the popup layout
         val popupYouTubePlayerView: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView =
             popupView.findViewById(R.id.popupVideoView)
 
+        // Create the PopupWindow with the specified layout parameters
         val popupWindow = PopupWindow(popupView,
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
