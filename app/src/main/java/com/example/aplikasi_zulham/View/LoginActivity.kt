@@ -6,10 +6,15 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.aplikasi_zulham.Controller.UsersController
 import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityLoginBinding
+import com.example.aplikasi_zulham.repository.Users
+import com.example.aplikasi_zulham.repository.UsersLogin
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
@@ -54,24 +59,40 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
         binding.loginButton.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
-
+            val password = binding.passwordEditText.text.toString()
             if (username.isEmpty()) {
                 binding.loginusername.error = "Nama Tidak Boleh Kosong"
                 return@setOnClickListener
             }
-
+            if (password.isEmpty()) {
+                binding.loginusername.error = "Nama Tidak Boleh Kosong"
+                return@setOnClickListener
+            }
             if (!NetworkHelper.isConnected(this)) {
                 alertDialog.startLoadingDialogJaringan()
                 return@setOnClickListener
             }
 
             binding.loginusername.error = null
-            val intent = Intent(this, MainActivity::class.java)
+            lifecycleScope.launch {
+                val users = UsersLogin(username, password)
+                val controller = UsersController()
+                val (token, role) = controller.Login(users) //
 
-            intent.putExtra("username", username)
-            startActivity(intent)
+                if (token != null && role != null) {
+                    val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    prefs.edit()
+                        .putString("token", token)
+                        .putString("role", role)
+                        .apply()
 
-            startActivity(intent)
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.putExtra("username", username)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+
         }
     }
 

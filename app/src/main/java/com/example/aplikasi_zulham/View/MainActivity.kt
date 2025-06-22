@@ -27,13 +27,21 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val token = prefs.getString("token", null)
+        val role = prefs.getString("role", null)
+
+
         val username = intent.getStringExtra("username") ?: ""
-        if (username == "admin"){
+
+
+        if (role == "admin"){
             replaceFragment(Admin())
             Log.d("Role",username)
 
             binding.NavButton.visibility = View.GONE
-        }else{
+        }else if (role == "user"){
             binding.NavButton.visibility = View.VISIBLE
             if (savedInstanceState == null) {
                 replaceFragment(HomeFragment())
