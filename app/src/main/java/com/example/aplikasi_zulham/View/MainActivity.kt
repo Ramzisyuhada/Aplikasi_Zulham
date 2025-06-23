@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         setContentView(binding.root)
 
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        val token = prefs.getString("token", null)
+        val token  = prefs.getString("token", null)
         val role = prefs.getString("role", null)
 
 
         val username = intent.getStringExtra("username") ?: ""
-
+        Log.i("POST" ,role.toString())
 
         if (role == "admin"){
             replaceFragment(Admin())

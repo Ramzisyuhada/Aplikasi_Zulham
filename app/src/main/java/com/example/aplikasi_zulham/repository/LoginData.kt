@@ -7,15 +7,15 @@ data class LoginResponse(
 )
 
 data class LoginData(
-    val user: UserData,
-    val token: String,
-    val id_tour: Int?
+    val user: User?,
+    val token: String?,
+    val id_tour: String?,
+    val role: String?
 )
 
-data class UserData(
+data class User(
     val id_users: Int,
     val username: String,
     val email: String,
     val role: String
 )
-

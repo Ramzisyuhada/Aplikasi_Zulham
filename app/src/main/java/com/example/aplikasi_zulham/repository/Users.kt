@@ -5,4 +5,4 @@ data class Users(    var username : String,
                      var email : String)
 
 
-data class UsersLogin(var username : String,var password:String)
+data class UsersLogin(var username : String,var password:String,var Destinasi : Int)

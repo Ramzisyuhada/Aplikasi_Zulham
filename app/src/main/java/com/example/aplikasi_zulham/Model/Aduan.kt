@@ -7,12 +7,20 @@ import java.io.File
 
 class Aduan   {
     var  Gambar  = ArrayList<Bitmap>()
-      var Lokasi : Alamat = Alamat()
-
+    var Lokasi : Alamat = Alamat()
     var DeskripsiMasalah : String = ""
     var isVideo: Boolean = false
     var videoFile: File? = null
+    var File = ArrayList<File>()
     constructor()
+
+
+    constructor(DeskripsiMasalah: String, Lokasi: Alamat,File: ArrayList<File>){
+        this.DeskripsiMasalah = DeskripsiMasalah
+        this.Lokasi = Lokasi
+        this.File = File
+    }
+
     constructor(
         Gambar: ArrayList<Bitmap>,
         Lokasi: Alamat,

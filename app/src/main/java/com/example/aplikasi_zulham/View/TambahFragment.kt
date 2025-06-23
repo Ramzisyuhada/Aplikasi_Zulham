@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasi_zulham.Adapter.AdapterMedia
+import com.example.aplikasi_zulham.Controller.AduanController
 import com.example.aplikasi_zulham.Model.Aduan
 import com.example.aplikasi_zulham.Model.Laporan
 import com.example.aplikasi_zulham.R
@@ -46,23 +47,17 @@ class TambahFragment : Fragment() {
     private val currentAduan = Aduan()
 
 
+    //Var Global
+
+    var Lat:Double = 0.0
+    var Long : Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
 
     private fun setupMap() {
-
-//        binding.mapview.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-//        binding.mapview.setMultiTouchControls(true)
-//        binding.mapview.controller.setZoom(15.0)
-//
-//        gpsHelper = GpsHelper(requireContext(), binding.mapview)
-//        gpsHelper.setupLocation(centerOnMyLocation = false)
-//
-//        binding.mapview.postDelayed({
-//            gpsHelper.setLocationByLatLng(datalaporan.alamat.latitude, datalaporan.alamat.longitude)
-//        }, 1000)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,9 +66,11 @@ class TambahFragment : Fragment() {
         bottomNav.visibility = View.GONE
         val  gps = GpsHelper(requireContext())
         gps.getLocation{lat, lon ->
-            Log.i("GPS", "Alamat : "+            getAddressFromCoordinates(lat,lon)
+            Log.i("GPS", "Alamat : "+
+                    getAddressFromCoordinates(lat,lon)
             )
-
+                this.Lat = lat
+                this.Long = lon
         }
         datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java]
 
@@ -82,13 +79,18 @@ class TambahFragment : Fragment() {
         val dialog1 = AlertDialog.Builder(requireContext())
             .setView(dialogSucces)
             .create()
-
         binding.Tambah.setOnClickListener {
+
+
+
 
             dialog1.show()
             dialogSucces.findViewById<TextView>(R.id.TextDialog1).text = "Terima kasih atas aduan Anda."
             dialogSucces.findViewById<Button>(R.id.ok).setOnClickListener {
                 dialog1.dismiss()
+
+                val Controller = AduanController()
+                val aduan = Aduan()
                 parentFragmentManager.beginTransaction()
                     .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
                     .addToBackStack(null)
@@ -139,7 +141,6 @@ class TambahFragment : Fragment() {
 //            binding.lok.visibility = View.GONE
 //
 //        }
-        Log.i("Aduan", "Data gambar: ${datalaporan.media.value}")
 
 
 

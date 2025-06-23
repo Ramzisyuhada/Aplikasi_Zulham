@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 
 class Laporan {
     private var _judul: String = ""
-    private var _image: Bitmap? = null
+    private var File: Bitmap? = null
     private var _aduan: String = ""
     private var _time: String = ""
     private var _lokasi: String = ""
@@ -13,14 +13,14 @@ class Laporan {
 
     constructor(judul: String, image: Bitmap, aduan: String, time: String, lokasi: String) {
         this._judul = judul
-        this._image = image
+        this.File = image
         this._aduan = aduan
         this._time = time
         this._lokasi = lokasi
     }
     constructor() {
         this._judul = judul
-        this._image = null
+        this.File = null
         this._aduan = aduan
         this._time = time
         this._lokasi = lokasi
@@ -32,9 +32,9 @@ class Laporan {
         }
 
     var image: Bitmap?
-        get() = _image
+        get() = File
         set(value) {
-            _image = value
+            File = value
         }
 
     var aduan: String

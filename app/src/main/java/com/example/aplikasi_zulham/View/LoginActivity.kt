@@ -3,6 +3,7 @@ package com.example.aplikasi_zulham.View
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,8 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper = NetworkHelper(this)
         networkHelper.setNetworkListener(this)
         networkHelper.startNetworkCallback()
+
+
         val kategori = arrayOf("kuta", "bukit merese", "pantai", "sirkuit mandalika")
         val adapter = ArrayAdapter(
             this, R.layout.simple_spinner_item, kategori
@@ -74,8 +77,9 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
             }
 
             binding.loginusername.error = null
+            Log.d("POST",binding.PilihanDestinasi.selectedItemPosition.toString())
             lifecycleScope.launch {
-                val users = UsersLogin(username, password)
+                val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
                 val controller = UsersController()
                 val (token, role) = controller.Login(users) //
 
