@@ -1,5 +1,8 @@
 package com.example.aplikasi_zulham.View
 
+import Alamat
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
@@ -17,9 +20,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aplikasi_zulham.Adapter.AdapterMedia
 import com.example.aplikasi_zulham.Controller.AduanController
@@ -30,6 +36,7 @@ import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.example.aplikasi_zulham.util.GpsHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import java.io.File
 import java.io.IOException
@@ -65,11 +72,21 @@ class TambahFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         bottomNav.visibility = View.GONE
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), 101)
+            return
+        }
+
         val  gps = GpsHelper(requireContext())
         gps.getLocation{lat, lon ->
-            Log.i("GPS", "Alamat : "+
-                    getAddressFromCoordinates(lat,lon)
-            )
+            Log.i("LOKASI", "Lokasi diterima - Lat: $lat, Lon: $lon")
+            Log.i("LOKASI", "Alamat hasil geocoder: ${getAddressFromCoordinates(lat, lon)}")
+
             this.Lat = lat
             this.Long = lon
         }
@@ -85,8 +102,18 @@ class TambahFragment : Fragment() {
             dialogSucces.findViewById<TextView>(R.id.TextDialog1).text = "Terima kasih atas aduan Anda."
             dialogSucces.findViewById<Button>(R.id.ok).setOnClickListener {
                 dialog1.dismiss()
+                val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
+                val token:String  = prefs.getString("token", null).toString()
+                Log.d("TOKEN",token.toString())
+                val Lokasi = Alamat(this.Lat,this.Long)
                 val Controller = AduanController()
-                val Aduan = Aduan()
+                val DeskripsiMasalah = binding.catatanEditText.text.toString()
+                val alamat =    getAddressFromCoordinates(this.Lat,this.Long)
+
+                val Aduan = Aduan(DeskripsiMasalah,Lokasi,datalaporan.ListFile)
+                lifecycleScope.launch {
+                    Controller.AddAduan(Aduan,token,alamat)
+                }
                 parentFragmentManager.beginTransaction()
                     .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
                     .addToBackStack(null)
@@ -114,27 +141,6 @@ class TambahFragment : Fragment() {
 
 
 
-//        if (datalaporan.alamat.OnMap) {
-//            binding.lok.visibility = View.VISIBLE
-//            binding.buttonlokasi.visibility = View.GONE
-//            binding.alertorange.visibility = View.GONE
-//
-//            setupMap()
-//
-//            binding.Latitude.text = datalaporan.alamat.latitude.toString()
-//            binding.Longitude.text = datalaporan.alamat.longitude.toString()
-//
-//            binding.ubahlokasi.setOnClickListener {
-//
-//                parentFragmentManager.beginTransaction()
-//                    .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-//        }else{
-//            binding.lok.visibility = View.GONE
-//
-//        }
 
 
 
@@ -223,7 +229,7 @@ class TambahFragment : Fragment() {
             val updatedList = datalaporan.media.value?.toMutableList()
             updatedList?.removeAt(position)
             datalaporan.media.value = updatedList as ArrayList<Aduan>?
-
+            datalaporan.ListFile.removeAt(position)
             adapterBerita.notifyItemRemoved(position)
 
             if (updatedList.isNullOrEmpty()) {
@@ -257,13 +263,14 @@ class TambahFragment : Fragment() {
                     Gambar.add(datalaporan.Image!!)
                     isVideo = datalaporan.isVideo
                     videoFile = datalaporan.NamaFile
-                    datalaporan.NamaFile?.let { File.add(it) }
+                    datalaporan.NamaFile?.let { datalaporan.ListFile.add(it) }
                 }
 
                 mediaList.add(aduan)
                 datalaporan.media.value = mediaList
             }
-
+            datalaporan.NamaFile?.let { datalaporan.ListFile.add(it) }
+            Log.d("DEBUG",datalaporan.ListFile.count().toString())
             binding.img.setImageBitmap(resizeBitmap(datalaporan.Image!!, 800, 800))
 
             datalaporan.Image = null

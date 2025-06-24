@@ -19,7 +19,7 @@ class ViewModelAduan : ViewModel() {
     var Kategori: String = ""
     var alamat: Alamat = Alamat() //
     var media = MutableLiveData<ArrayList<Aduan>>(ArrayList())
-
+    var ListFile = ArrayList<File>()
     fun clear() {
         NamaFile = null
         Judul = ""

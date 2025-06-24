@@ -2,34 +2,60 @@ package com.example.aplikasi_zulham.Controller
 
 import android.util.Log
 import com.example.aplikasi_zulham.Model.Aduan
+import com.example.aplikasi_zulham.Retrofit.AuthInstance
 import com.example.aplikasi_zulham.Retrofit.UserInstance
+import com.example.aplikasi_zulham.repository.LoginResponse
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
+import java.io.File
 
 class AduanController {
-
-    suspend fun AddAduan(Aduan : Aduan): Boolean{
+    suspend fun AddAduan(aduan: Aduan, token: String,Alamat :String): Boolean {
         return try {
-            val body = mapOf(
-                "complaint" to Aduan.DeskripsiMasalah,
-                "latitude" to Aduan.Lokasi.latitude,
-                "longitude" to Aduan.Lokasi.longitude,
-                "latitude" to Aduan.File
-            )
-            val Respone = UserInstance.api.AddComplaint(body)
-            if (Respone.isSuccessful ){
-                Log.i("POST" , Respone.body().toString())
+            val complaint = aduan.DeskripsiMasalah.toRequestBody("text/plain".toMediaTypeOrNull())
+            val latitude = aduan.Lokasi.latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val longitude = aduan.Lokasi.longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val completeAddress = Alamat
+                .toRequestBody("text/plain".toMediaTypeOrNull()) // <- ini tambahkan
+            val mediaParts = aduan.File.mapIndexed { index, file ->
+                val mediaType = when {
+                    file.extension.equals("mp4", true) -> "video/mp4"
+                    else -> "image/jpeg"
+                }.toMediaTypeOrNull()
 
+                val requestFile = file.asRequestBody(mediaType)
+                MultipartBody.Part.createFormData("media[$index]", file.name, requestFile)
+            }
+
+
+            val response = AuthInstance.getInstance(token).AddComplaint(
+                complaint,
+                latitude,
+                longitude,
+                completeAddress,
+                mediaParts
+
+            )
+
+            return if (response.isSuccessful) {
+                val jsonString = response.body()?.string()
+                Log.d("POST", "Isi JSON: $jsonString")
                 true
-            }else{
-                Log.i("POST" , Respone.errorBody().toString())
+            } else {
+                Log.e("POST", "Gagal kirim aduan: ${response.errorBody()?.string()}")
                 false
             }
-        }catch (e : Exception){
-            Log.i("POST" , e.toString())
 
+        } catch (e: Exception) {
+            Log.e("POST", "Gagal mengirim aduan", e)
             false
         }
     }
+
 
 
 }

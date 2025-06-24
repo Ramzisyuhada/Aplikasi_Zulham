@@ -190,6 +190,8 @@ class CameraFragment : Fragment() {
     }
     private fun ConvertBitmapToFile(context : Context, bitmap : Bitmap, FileName : String) :File{
         val File = File(context.cacheDir, FileName)
+        File.createNewFile()
+
         val outputStream = FileOutputStream(File)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
 
@@ -207,10 +209,9 @@ class CameraFragment : Fragment() {
                 override fun onCaptureSuccess(image: ImageProxy) {
                     val bitmap = imageProxyToBitmap(image)
 
-                    val File = ConvertBitmapToFile(requireContext(), bitmap,"Gambar_Aduan.jpg")
-                    Log.d("DEBUG",File.name)
+                    val fileImage  = ConvertBitmapToFile(requireContext(), bitmap,"Gambar_Aduan.jpg")
                     laporan.Image = bitmap
-                    laporan.NamaFile = File
+                    laporan.NamaFile = fileImage
                     laporan.isVideo = false
 
                     val aduan = Aduan().apply {
