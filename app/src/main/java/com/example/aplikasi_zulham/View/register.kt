@@ -3,12 +3,9 @@ package com.example.aplikasi_zulham.View
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-<<<<<<< HEAD
 import com.example.aplikasi_zulham.Controller.UserController
-=======
 import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.Controller.UsersController
->>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.R
@@ -34,83 +31,89 @@ class register : AppCompatActivity() , NetworkHelper.NetworkListener {
 
         setContentView(binding.root)
         binding.Registerbutton.setOnClickListener {
-<<<<<<< HEAD
             val nama = binding.registerusername.toString()
             val email = binding.registeremail.toString()
             val password = binding.passwordEditText.toString()
             val password2 = binding.passwordEditText2.toString()
-            val hasil = userController.Register(User(nama,email,password,password2),window.decorView.rootView)
+            val hasil = userController.Register(
+                User(nama, email, password, password2),
+                window.decorView.rootView
+            )
             val intent = Intent(this, MainActivity::class.java)
 
-            if(hasil == 1){
+            if (hasil == 1) {
                 startActivity(intent)
-=======
-            val nama = binding.registerusername.text.toString().trim()
-            val email = binding.registeremail.text.toString().trim()
-            val password = binding.passwordEditText.text.toString()
-            val password2 = binding.passwordEditText2.text.toString()
-            var controller = UsersController()
 
-            var isValid = true
+                val nama = binding.registerusername.text.toString().trim()
+                val email = binding.registeremail.text.toString().trim()
+                val password = binding.passwordEditText.text.toString()
+                val password2 = binding.passwordEditText2.text.toString()
+                var controller = UsersController()
 
-            if (nama.isEmpty()) {
-                binding.registerusername.error = "Nama tidak boleh kosong"
-                isValid = false
->>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
-            }
+                var isValid = true
 
-            if (email.isEmpty()) {
-                binding.registeremail.error = "Email tidak boleh kosong"
-                isValid = false
-            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.registeremail.error = "Format email tidak valid"
-                isValid = false
-            }
-
-            if (password.isEmpty()) {
-                binding.passwordEditText.error = "Password tidak boleh kosong"
-                isValid = false
-            } else if (password.length < 8) {
-                binding.passwordEditText.error = "Password minimal 8 karakter"
-                isValid = false
-            }
-
-            if (password2.isEmpty()) {
-                binding.passwordEditText2.error = "Konfirmasi password tidak boleh kosong"
-                isValid = false
-            } else if (password != password2) {
-                binding.passwordEditText2.error = "Password tidak sama"
-                isValid = false
-            }
-
-            if (!NetworkHelper.isConnected(this)) {
-                alert.startLoadingDialogJaringan()
-                return@setOnClickListener
-            }
-
-            if (isValid) {
-                val user = Users(nama,password,email)
-                var respone = false
-                lifecycleScope.launch {
-                    respone= controller.AddUsers(user)
-                    if (respone) {
-                        val intent = Intent(this@register, LoginActivity::class.java)
-
-                        startActivity(intent)
-                        finish()
-                    }
+                if (nama.isEmpty()) {
+                    binding.registerusername.error = "Nama tidak boleh kosong"
+                    isValid = false
 
                 }
 
+                if (email.isEmpty()) {
+                    binding.registeremail.error = "Email tidak boleh kosong"
+                    isValid = false
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    binding.registeremail.error = "Format email tidak valid"
+                    isValid = false
+                }
+
+                if (password.isEmpty()) {
+                    binding.passwordEditText.error = "Password tidak boleh kosong"
+                    isValid = false
+                } else if (password.length < 8) {
+                    binding.passwordEditText.error = "Password minimal 8 karakter"
+                    isValid = false
+                }
+
+                if (password2.isEmpty()) {
+                    binding.passwordEditText2.error = "Konfirmasi password tidak boleh kosong"
+                    isValid = false
+                } else if (password != password2) {
+                    binding.passwordEditText2.error = "Password tidak sama"
+                    isValid = false
+                }
+
+                if (!NetworkHelper.isConnected(this)) {
+                    alert.startLoadingDialogJaringan()
+                    return@setOnClickListener
+                }
+
+                if (isValid) {
+                    val user = Users(nama, password, email)
+                    var respone = false
+                    lifecycleScope.launch {
+                        respone = controller.AddUsers(user)
+                        if (respone) {
+                            val intent = Intent(this@register, LoginActivity::class.java)
+
+                            startActivity(intent)
+                            finish()
+                        }
+
+                    }
+
+                }
             }
+
         }
+
 
     }
 
     override fun onNetworkAvailable() {
         runOnUiThread {
             alert.dismissDialog()
-        }    }
+        }
+    }
 
     override fun onNetworkLost() {
         runOnUiThread {

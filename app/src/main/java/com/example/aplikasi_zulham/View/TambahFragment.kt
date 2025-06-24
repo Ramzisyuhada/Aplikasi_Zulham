@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -30,6 +31,7 @@ import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.example.aplikasi_zulham.util.GpsHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import java.io.File
 import java.io.IOException
 import java.util.Locale
 
@@ -50,7 +52,7 @@ class TambahFragment : Fragment() {
 
     var Lat:Double = 0.0
     var Long : Double = 0.0
-
+    var File = ArrayList<File>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,42 +70,23 @@ class TambahFragment : Fragment() {
             Log.i("GPS", "Alamat : "+
                     getAddressFromCoordinates(lat,lon)
             )
-                this.Lat = lat
-                this.Long = lon
+            this.Lat = lat
+            this.Long = lon
         }
         datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java]
 
-
-//        binding.simpan.setOnClickListener {
-//
-//            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
-//
-//
-//            parentFragmentManager.beginTransaction().replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
-//
-//            .addToBackStack(null)
-//            .commit()
-//
-//            bottomNav.visibility = View.VISIBLE
-//            bottomNav.selectedItemId = R.id.home
-//        }
         val dialogSucces = LayoutInflater.from(requireContext()).inflate(R.layout.alertdialog_succes_ulasan, null)
 
         val dialog1 = AlertDialog.Builder(requireContext())
             .setView(dialogSucces)
             .create()
         binding.Tambah.setOnClickListener {
-
-
-
-
             dialog1.show()
             dialogSucces.findViewById<TextView>(R.id.TextDialog1).text = "Terima kasih atas aduan Anda."
             dialogSucces.findViewById<Button>(R.id.ok).setOnClickListener {
                 dialog1.dismiss()
-
                 val Controller = AduanController()
-                val aduan = Aduan()
+                val Aduan = Aduan()
                 parentFragmentManager.beginTransaction()
                     .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
                     .addToBackStack(null)
@@ -115,13 +98,11 @@ class TambahFragment : Fragment() {
 
         }
         datalaporan.Aduan.DeskripsiMasalah?.let {
-            value ->
+                value ->
             if (value.isNotEmpty())        binding.catatanEditText.setText(value)
-
         }
         binding.catatanEditText.addTextChangedListener { text ->
             datalaporan.Aduan.DeskripsiMasalah = text.toString()
-
         }
         binding.catatanEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -180,29 +161,14 @@ class TambahFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTambahBinding.inflate(inflater, container, false)
+
         binding.buttonmedia.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(com.example.aplikasi_zulham.R.id.Frame, CameraFragment())
-//                .addToBackStack(null)
-//                .commit()
+
             val bottomSheet = MyBottomSheetFragment()
             bottomSheet.show(parentFragmentManager, bottomSheet.tag)
 
 
         }
-
-//        binding.buttonlokasi.setOnClickListener {
-//            val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
-//            bottomNav.visibility = View.GONE
-//
-//            parentFragmentManager.beginTransaction()
-//                .replace(com.example.aplikasi_zulham.R.id.Frame, GpsFragment())
-//                .addToBackStack(null)
-//                .commit()
-//
-//
-//        }
-
         return binding.root
     }
 
@@ -225,120 +191,114 @@ class TambahFragment : Fragment() {
         return Bitmap.createScaledBitmap(bitmap, finalWidth, finalHeight, true)
     }
 
-    private fun initRecycler(){
-
+    private fun initRecycler() {
         binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        val resizedBitmap = datalaporan.Image?.let { resizeBitmap(it,800,800) }
         val adapter = datalaporan.media.value ?: ArrayList()
-        resizedBitmap?.let {
 
-            value ->
-            val aduan = Aduan()
-            aduan.Gambar.add(value)
-            adapter.add(aduan)
-            datalaporan.Image = null
-        }
+        adapterBerita = AdapterMedia(ArrayList(adapter), { selectedImage, _ ->
 
-        adapterBerita = AdapterMedia(ArrayList(adapter), { SelectedImage ,_->
+            if (selectedImage.Gambar.isNotEmpty()) {
+                binding.img.setImageBitmap(resizeBitmap(selectedImage.Gambar.last(), 800, 800))
+                binding.img.visibility = View.VISIBLE
+            }
 
-            if (SelectedImage.Gambar.isNotEmpty()) {
-                binding.img.setImageBitmap(resizeBitmap(SelectedImage.Gambar.last(), 800, 800))
+            if (selectedImage.isVideo && selectedImage.videoFile != null) {
+                binding.video.apply {
+                    visibility = View.VISIBLE
+                    setVideoPath(selectedImage.videoFile!!.absolutePath)
+                    setOnPreparedListener { mp ->
+                        mp.isLooping = true
+                        start()
+                    }
+                }
+            } else {
+                binding.video.stopPlayback()
+
+                binding.video.visibility = View.GONE
             }
 
         }, { aduan, position ->
             val updatedList = datalaporan.media.value?.toMutableList()
-
             updatedList?.removeAt(position)
             datalaporan.media.value = updatedList as ArrayList<Aduan>?
 
             adapterBerita.notifyItemRemoved(position)
 
-            if (datalaporan.media.value!!.isNullOrEmpty()) {
+            if (updatedList.isNullOrEmpty()) {
                 binding.recyclerView.visibility = View.GONE
                 binding.img.visibility = View.GONE
-            } else {
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.img.visibility = View.VISIBLE
+                binding.video.stopPlayback()
 
+                binding.video.visibility = View.GONE
             }
-
         })
-        datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
-            adapterBerita.updateData(updatedList.take(5))
-        }
-        binding.recyclerView.adapter = adapterBerita
 
+        datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
+            adapterBerita.updateData(updatedList.take(3))
+        }
+
+        binding.recyclerView.adapter = adapterBerita
     }
-//    private fun initRecycler() {
-//        binding.recyclerView.setHasFixedSize(true)
-//        binding.recyclerView.layoutManager =
-//            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//        Log.i("Aduan", "${ datalaporan.media.value?.count()}")
-//
-//         resizedBitmap = datalaporan.Image?.let { resizeBitmap(it, 800, 800) }
-//
-//        val currentList = datalaporan.media.value ?: ArrayList()
-//
-//        val isAlreadyAdded = currentList.any { aduan ->
-//            aduan.Gambar.any { it.sameAs(resizedBitmap) }
-//        }
-//        if (!isAlreadyAdded && resizedBitmap != null) {
-//            val newAduan = Aduan()
-//            newAduan.Gambar.add(resizedBitmap!!)
-//            currentList.add(newAduan)
-//            datalaporan.media.value = currentList
-//        }
-//
-//        val limitedList = datalaporan.media.value?.take(5)
-//        adapterBerita = AdapterMedia(ArrayList(limitedList), { selectedImage ->
-//        }, { aduan,position ->
-//            val updatedList = datalaporan.media.value?.toMutableList()
-//
-//            updatedList?.removeAt(position)
-//            datalaporan.media.value = updatedList as ArrayList<Aduan>?
-//
-//
-//            if (updatedList.isNullOrEmpty()) {
-//                binding.recyclerView.visibility = View.GONE
-//            } else {
-//                binding.recyclerView.visibility = View.VISIBLE
-//            }
-//
-//            adapterBerita.notifyItemRemoved(position)
-//
-//        })
-//        datalaporan.media.observe(viewLifecycleOwner) { updatedList ->
-//            adapterBerita.updateData(updatedList.take(5))
-//        }
-//
-//
-//        binding.recyclerView.adapter = adapterBerita
-//
-//    }
+
 
     override fun onResume() {
         super.onResume()
+        val mediaList = datalaporan.media.value ?: ArrayList()
+
         if (datalaporan.Image != null) {
-            binding.img.setImageBitmap(resizeBitmap(datalaporan.Image!!,800,800))
+            val imageAlreadyAdded = datalaporan.media.value?.any { aduan ->
+                aduan.Gambar.isNotEmpty() && aduan.Gambar.last().sameAs(datalaporan.Image)
+            } == true
+
+            if (!imageAlreadyAdded) {
+                val aduan = Aduan().apply {
+                    Gambar.add(datalaporan.Image!!)
+                    isVideo = datalaporan.isVideo
+                    videoFile = datalaporan.NamaFile
+                    datalaporan.NamaFile?.let { File.add(it) }
+                }
+
+                mediaList.add(aduan)
+                datalaporan.media.value = mediaList
+            }
+
+            binding.img.setImageBitmap(resizeBitmap(datalaporan.Image!!, 800, 800))
+
+            datalaporan.Image = null
+            datalaporan.NamaFile = null
+            datalaporan.isVideo = false
+
             initRecycler()
         }
-        if ( datalaporan.media.value!!.isNotEmpty() ) {
 
+
+        if (mediaList.isNotEmpty()) {
             binding.recyclerView.visibility = View.VISIBLE
-
             binding.img.visibility = View.VISIBLE
 
-
+            val lastItem = mediaList.last()
+            if (lastItem.isVideo && lastItem.videoFile != null) {
+                binding.video.apply {
+                    visibility = View.VISIBLE
+                    setVideoPath(lastItem.videoFile!!.absolutePath)
+                    setOnPreparedListener { mp ->
+                        mp.isLooping = true
+                        start()
+                    }
+                }
+            } else {
+                binding.video.stopPlayback()
+                binding.video.visibility = View.GONE
+            }
         } else {
-
             binding.recyclerView.visibility = View.GONE
             binding.img.visibility = View.GONE
-
+            binding.video.visibility = View.GONE
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -7,12 +7,9 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-<<<<<<< HEAD
 import com.example.aplikasi_zulham.Controller.UserController
-=======
 import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.Controller.UsersController
->>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
 import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.Model.User
@@ -68,7 +65,6 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         binding.loginButton.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
-<<<<<<< HEAD
             val hasil = userController.Login(User(username,password),window.decorView.rootView)
 //            if (username.isEmpty() && password.isEmpty()) {
 //                binding.loginpassword.error = "Password Tidak Boleh Kosong"
@@ -77,7 +73,6 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 //            }
 
 
-=======
             if (username.isEmpty()) {
                 binding.loginusername.error = "Nama Tidak Boleh Kosong"
                 return@setOnClickListener
@@ -86,14 +81,12 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
                 binding.loginusername.error = "Nama Tidak Boleh Kosong"
                 return@setOnClickListener
             }
->>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
             if (!NetworkHelper.isConnected(this)) {
                 alertDialog.startLoadingDialogJaringan()
                 return@setOnClickListener
             }
 
             binding.loginusername.error = null
-<<<<<<< HEAD
             val intent = Intent(this, MainActivity::class.java)
             if (hasil == 1){
                 intent.putExtra("username", username)
@@ -101,7 +94,6 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             }
 
-=======
             Log.d("POST",binding.PilihanDestinasi.selectedItemPosition.toString())
             lifecycleScope.launch {
                 val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
@@ -121,7 +113,6 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
                     finish()
                 }
             }
->>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
 
         }
     }

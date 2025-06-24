@@ -1,0 +1,23 @@
+package com.example.aplikasi_zulham.Retrofit
+
+import com.example.aplikasi_zulham.Interface.ApiService
+import com.example.aplikasi_zulham.Retrofit.UserInstance.gson
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+object AuthInstance {
+    fun getInstance(token: String): ApiService {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(token))
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.114.40:8000/api/")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(ApiService::class.java)
+    }
+}
