@@ -9,7 +9,5 @@ object RetrofitInstance {
         .baseUrl("https://api.bmkg.go.id/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
     val api = retrofit.create(ApiService::class.java)
-
 }

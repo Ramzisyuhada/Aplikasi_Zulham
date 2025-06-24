@@ -3,15 +3,24 @@ package com.example.aplikasi_zulham.View
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+<<<<<<< HEAD
 import com.example.aplikasi_zulham.Controller.UserController
+=======
+import androidx.lifecycle.lifecycleScope
+import com.example.aplikasi_zulham.Controller.UsersController
+>>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
 import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityLoginBinding
+import com.example.aplikasi_zulham.repository.Users
+import com.example.aplikasi_zulham.repository.UsersLogin
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
@@ -30,6 +39,8 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper = NetworkHelper(this)
         networkHelper.setNetworkListener(this)
         networkHelper.startNetworkCallback()
+
+
         val kategori = arrayOf("kuta", "bukit merese", "pantai", "sirkuit mandalika")
         val adapter = ArrayAdapter(
             this, R.layout.simple_spinner_item, kategori
@@ -57,6 +68,7 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         binding.loginButton.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
+<<<<<<< HEAD
             val hasil = userController.Login(User(username,password),window.decorView.rootView)
 //            if (username.isEmpty() && password.isEmpty()) {
 //                binding.loginpassword.error = "Password Tidak Boleh Kosong"
@@ -65,12 +77,23 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 //            }
 
 
+=======
+            if (username.isEmpty()) {
+                binding.loginusername.error = "Nama Tidak Boleh Kosong"
+                return@setOnClickListener
+            }
+            if (password.isEmpty()) {
+                binding.loginusername.error = "Nama Tidak Boleh Kosong"
+                return@setOnClickListener
+            }
+>>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
             if (!NetworkHelper.isConnected(this)) {
                 alertDialog.startLoadingDialogJaringan()
                 return@setOnClickListener
             }
 
             binding.loginusername.error = null
+<<<<<<< HEAD
             val intent = Intent(this, MainActivity::class.java)
             if (hasil == 1){
                 intent.putExtra("username", username)
@@ -78,6 +101,27 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             }
 
+=======
+            Log.d("POST",binding.PilihanDestinasi.selectedItemPosition.toString())
+            lifecycleScope.launch {
+                val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
+                val controller = UsersController()
+                val (token, role) = controller.Login(users) //
+
+                if (token != null && role != null) {
+                    val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                    prefs.edit()
+                        .putString("token", token)
+                        .putString("role", role)
+                        .apply()
+
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.putExtra("username", username)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+>>>>>>> 6cebebf010d1ceb4654375a6160916e498a35a82
 
         }
     }
