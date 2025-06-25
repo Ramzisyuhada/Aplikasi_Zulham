@@ -1,5 +1,6 @@
 package com.example.aplikasi_zulham.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class AdapterBerita(
 
 
     class AdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val  Nama:TextView =  itemView.findViewById(R.id.textjudul)
         val image: ImageView = itemView.findViewById(R.id.beritagambar)
         val textBerita: TextView = itemView.findViewById(R.id.textberita)
         val time: TextView = itemView.findViewById(R.id.time)
@@ -28,7 +30,7 @@ class AdapterBerita(
 
     override fun onBindViewHolder(holder: AdapterViewHolder, position: Int) {
         val berita = beritaList[position]
-
+        holder.Nama.text = berita.judul
         holder.image.setImageBitmap(berita.image)
         holder.textBerita.text = berita.aduan
         holder.time.text = berita.time
@@ -36,6 +38,12 @@ class AdapterBerita(
         holder.itemView.setOnClickListener {
             onItemClick(berita)
         }
+    }
+    fun updateData(newItems: List<Laporan>) {
+        Log.d("ADAPTER", "updateData called with ${newItems.size} items")
+        beritaList.clear()
+        beritaList.addAll(newItems)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
