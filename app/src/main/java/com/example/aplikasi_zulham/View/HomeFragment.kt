@@ -152,8 +152,8 @@ class HomeFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token  = prefs.getString("token", null)
         lifecycleScope.launch {
-            token?.let { Controller.GetAllAduan(1,it) }
-
+         val Json =    token?.let { Controller.GetAllAduan(1,it) }
+        Log.d("JSON", Json?.getJSONArray("data").toString())
         }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

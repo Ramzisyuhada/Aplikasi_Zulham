@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import retrofit2.Response
 import java.io.File
 
@@ -65,21 +66,26 @@ class AduanController {
 //        }
 //    }
 
-    suspend fun GetAllAduan(id:Int,Token:String):String{
+    suspend fun GetAllAduan(id:Int,Token:String):JSONObject{
         return try {
             val Response = AuthInstance.getInstance(Token).GetAllAduan(id)
             return if(Response.isSuccessful){
                 val bodyString = Response.body()?.string()
+
                 Log.d("POST", "Pesan : $bodyString")
-                bodyString ?: "Kosong"
+                JSONObject(bodyString ?: "{}") // handle kalau null
             }else{
-                Log.e("POST","Pesan : "+Response.errorBody().toString())
-                Response.errorBody().toString()
+                val errorString = Response.errorBody()?.string()
+                Log.e("POST", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
             }
 
         }catch (e : Exception){
             Log.e("POST","Error Nya Adalah : " + e.toString())
-            return  e.toString()
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }
         }
     }
 
