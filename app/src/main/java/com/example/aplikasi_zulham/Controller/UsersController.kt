@@ -29,7 +29,7 @@ class UsersController {
 
 
 
-    suspend fun ResetPassword(user : Users) : Pair<String?,String?>
+    suspend fun ResetPassword(user : Users) : String
     {
         return try {
 
@@ -39,17 +39,15 @@ class UsersController {
 
             val response = UserInstance.api.ResetPassword(body)
            if (response.isSuccessful){
-               Pair("Succes", response.toString())
-
+                return response.body().toString()
            }else{
-               Pair(null, null)
-               val errorBody = response.errorBody()?.string()
-               Pair("error", errorBody)
+               return response.errorBody().toString()
+
            }
 
         }catch (e : Exception){
             Pair("exception", e.localizedMessage)
-
+            return ""
         }
     }
 

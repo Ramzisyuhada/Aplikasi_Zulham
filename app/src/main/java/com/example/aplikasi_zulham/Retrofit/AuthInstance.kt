@@ -18,7 +18,7 @@ object AuthInstance {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.11:8000/api/")
+            .baseUrl("http://192.168.114.40:8000/api/")
             .client(client)
 
             .addConverterFactory(GsonConverterFactory.create(gson))

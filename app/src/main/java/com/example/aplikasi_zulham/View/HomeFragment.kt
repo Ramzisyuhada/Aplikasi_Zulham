@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,10 @@ import com.example.aplikasi_zulham.ViewModel.ViewModelAduan
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.AduanKu
+import com.example.aplikasi_zulham.Controller.AduanController
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -141,6 +145,16 @@ class HomeFragment : Fragment() {
         list.add(SlideModel(R.drawable.tahura1, ScaleTypes.FIT))
         list.add(SlideModel(R.drawable.tahura2, ScaleTypes.FIT))
         binding.imageSlider.setImageList(list, ScaleTypes.FIT)
+
+
+        val Controller = AduanController()
+
+        val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val token  = prefs.getString("token", null)
+        lifecycleScope.launch {
+            token?.let { Controller.GetAllAduan(1,it) }
+
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
 
         val username = intent.getStringExtra("username") ?: ""
-        Log.i("POST" ,role.toString())
 
         if (role == "admin"){
             replaceFragment(Admin())
@@ -42,6 +41,8 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             binding.NavButton.visibility = View.GONE
         }else if (role == "user"){
+            Log.d("Role",role.toString())
+
             binding.NavButton.visibility = View.VISIBLE
             if (savedInstanceState == null) {
                 replaceFragment(HomeFragment())

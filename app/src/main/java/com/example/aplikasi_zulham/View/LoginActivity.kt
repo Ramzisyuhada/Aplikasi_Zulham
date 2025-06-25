@@ -94,11 +94,10 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
 
             }
 
-            Log.d("POST",binding.PilihanDestinasi.selectedItemPosition.toString())
             lifecycleScope.launch {
                 val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
                 val controller = UsersController()
-                val (token, role) = controller.Login(users) //
+                val (token, role) = controller.Login(users)
 
                 if (token != null && role != null) {
                     val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)

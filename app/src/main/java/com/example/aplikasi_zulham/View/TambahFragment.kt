@@ -270,7 +270,6 @@ class TambahFragment : Fragment() {
                 datalaporan.media.value = mediaList
             }
             datalaporan.NamaFile?.let { datalaporan.ListFile.add(it) }
-            Log.d("DEBUG",datalaporan.ListFile.count().toString())
             binding.img.setImageBitmap(resizeBitmap(datalaporan.Image!!, 800, 800))
 
             datalaporan.Image = null
