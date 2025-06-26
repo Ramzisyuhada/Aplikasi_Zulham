@@ -58,13 +58,27 @@ class AduanController {
     }
 
 //
-//    suspend fun GetAduanIdFromToken(Token : String){
-//        try {
-//            val Response =
-//        }catch (e : Exception){
-//            Log.e("ERROR","Error nya adalah : "+e.message.toString())
-//        }
-//    }
+    suspend fun GetAduanById (Id : Int,Token: String):JSONObject{
+       return try {
+            val Response = AuthInstance.getInstance(Token).getComplaintById(Id)
+            return if(Response.isSuccessful){
+                val bodyString = Response.body()?.string()
+
+                Log.d("POST", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}") // handle kalau null
+            }else{
+                val errorString = Response.errorBody()?.string()
+                Log.e("POST", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+
+        }catch (e : Exception){
+            Log.e("POST","Error Nya Adalah : " + e.toString())
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }        }
+    }
 
     suspend fun GetAllAduan(id:Int,Token:String):JSONObject{
         return try {

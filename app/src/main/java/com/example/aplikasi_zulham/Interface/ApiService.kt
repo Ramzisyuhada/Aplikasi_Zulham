@@ -53,4 +53,6 @@ interface ApiService {
     @GET("complaints")
     suspend fun GetAllAduan(@Query("id_tour") userId: Int):Response<ResponseBody>
 
+    @GET("complaints/{id}")
+    suspend fun getComplaintById(@Path("id") id: Int):Response<ResponseBody>
 }

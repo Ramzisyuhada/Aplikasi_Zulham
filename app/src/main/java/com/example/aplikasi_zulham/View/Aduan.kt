@@ -1,16 +1,24 @@
 package com.example.aplikasi_zulham.View
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.transition.Slide
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.lifecycle.lifecycleScope
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
+import com.example.aplikasi_zulham.Controller.AduanController
 import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.databinding.FragmentAduanBinding
 import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,10 +54,45 @@ class Aduan : Fragment() {
         list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
         list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
 
+
+        lifecycleScope.launch {
+            val id_complaint = arguments?.getInt("id_complaint")
+            Log.d("ID_COMPLAINT", id_complaint.toString())
+
+            val Controller = AduanController()
+            val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
+            val token = prefs.getString("token", null)
+
+            id_complaint?.let { id ->
+                token?.let { token ->
+                   val JSONObject= Controller.GetAduanById(id, token)
+                    val DataOnject = JSONObject.getJSONObject("data")
+                    val UserObject = DataOnject.getJSONObject("user")
+                    val Username = UserObject.getString("username")
+                    val Complaint = DataOnject.getString("complaint")
+                    val IdComplaint = DataOnject.getInt("id_complaint")
+                    val ComplaintDate = DataOnject.getString("complaint_date")
+                    val Date = ComplaintDate.split(" ")
+
+                    binding.NamapenggunaID.text = Username
+                    binding.DeskripsiTourisgGuidIDs.text = Complaint
+                    binding.NomerAduanID.text = "#0000" + IdComplaint.toString()
+                    binding.TanggalAduanID.text = formatTanggal(ComplaintDate)
+                }
+            }
+        }
         binding.imageSlider.setImageList(list)
         return binding.root
     }
 
+
+    fun formatTanggal(tanggalInput: String): String {
+        val locale = Locale("id", "ID")
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale)
+        val outputFormat = SimpleDateFormat("dd MMMM yyyy HH.mm", locale)
+        val date = inputFormat.parse(tanggalInput)
+        return outputFormat.format(date!!)
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

@@ -3,6 +3,7 @@ package com.example.aplikasi_zulham
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -24,6 +26,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -51,6 +57,7 @@ class ListAduan : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,6 +88,7 @@ class ListAduan : Fragment() {
                 for(i in 0 until JsonArray.length()){
                     val Item = JsonArray.getJSONObject(i)
                     val Complaint = Item.getString("complaint")
+                    val id_complaint = Item.getInt("id_complaint")
                     val ComplaintDate = Item.getString("complaint_date")
                     val Date = ComplaintDate.split(" ")
                     val MediaArray = Item.getJSONArray("media")
@@ -88,9 +96,14 @@ class ListAduan : Fragment() {
                         val view = inflater.inflate(R.layout.card_aduan, binding.cardContainer, false)
                         view.findViewById<TextView>(R.id.KeluhanID).text = Complaint
                         view.findViewById<ImageView>(R.id.IconAduanID).setImageBitmap(Bitmap)
+                        view.findViewById<TextView>(R.id.LamaUploadID).text = convertToCustomFormat(ComplaintDate)
                         binding.cardContainer.addView(view)
                         view.setOnClickListener {
-                            replaceFragment(Aduan())
+                            val bundle = Bundle()
+                            val aduan = Aduan()
+                            bundle.putInt("id_complaint", id_complaint)
+                            aduan.arguments = bundle
+                            replaceFragment(aduan)
                         }
                     }
                 }
@@ -98,6 +111,16 @@ class ListAduan : Fragment() {
         }
         return binding.root
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertToCustomFormat(input: String): String {
+        val formatterInput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val dateTime = LocalDateTime.parse(input, formatterInput)
+
+        val formatterOutput = DateTimeFormatter.ofPattern("EEEE MMMM d | hh.mm a", Locale("id", "ID"))
+        return dateTime.format(formatterOutput)
+    }
+
     private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
             .replace(R.id.Frame, fragment)
