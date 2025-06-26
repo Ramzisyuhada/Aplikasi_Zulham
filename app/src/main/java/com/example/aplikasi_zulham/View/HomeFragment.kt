@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
             val dataArray = json?.getJSONArray("data")
 
             if (dataArray != null) {
-                for (i in 0 until dataArray.length()) {
+                    for (i in 0 until dataArray.length()) {
                     val item = dataArray.getJSONObject(i)
                     val username = item.getJSONObject("user").getString("username")
                     val complaint = item.getString("complaint")
