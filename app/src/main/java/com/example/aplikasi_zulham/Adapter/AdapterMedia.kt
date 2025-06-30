@@ -12,7 +12,7 @@ import com.example.aplikasi_zulham.Model.Aduan
 import com.example.aplikasi_zulham.R
 
 class AdapterMedia(
-    private var beritaList: ArrayList<Aduan>,
+        private var beritaList: ArrayList<Aduan>,
     private val onItemClick: (Aduan,Int) -> Unit,
     private val onDetailsClick: (Aduan,Int) -> Unit
 

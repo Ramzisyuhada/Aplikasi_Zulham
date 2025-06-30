@@ -16,21 +16,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/image_slider"
+            <com.github.islamkhsh.CardSliderViewPager
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/DesripsiAduanbg"
+                android:id="@+id/image_slider"
+                android:layout_marginTop="24dp"
+                app:cardSlider_smallScaleFactor="0.9"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintDimensionRatio="16:9"
-                app:iss_auto_cycle="true"
-                app:iss_corner_radius="0"
-                app:iss_delay="1000"
-                app:iss_period="1000"
-                app:iss_text_align="center"
-                app:iss_title_background="@color/white" />
+            app:cardSlider_otherPagesWidth="24dp"
+            app:cardSlider_pageMargin="12dp"
+            app:auto_slide_time="3"/>
+
+            <com.github.islamkhsh.CardSliderIndicator
+                android:layout_width="0dp"
+                app:layout_constraintTop_toBottomOf="@id/image_slider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/DesripsiAduanbg"
+                android:layout_height="0dp"
+                android:id="@+id/indicator"
+                app:indicatorsToShow="5" />
+<!--            <com.denzcoskun.imageslider.ImageSlider-->
+<!--                android:id="@+id/image_slider"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/DesripsiAduanbg"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintDimensionRatio="16:9"-->
+<!--                app:iss_auto_cycle="true"-->
+<!--                app:iss_corner_radius="0"-->
+<!--                app:iss_delay="1000"-->
+<!--                app:iss_period="1000"-->
+<!--                app:iss_text_align="center"-->
+<!--                app:iss_title_background="@color/white" />-->
 
             <LinearLayout
                 android:id="@+id/DesripsiAduanbg"
@@ -42,7 +65,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/image_slider">
+                app:layout_constraintTop_toBottomOf="@id/indicator">
 
                 <TextView
                     android:id="@+id/NamapenggunaID"
