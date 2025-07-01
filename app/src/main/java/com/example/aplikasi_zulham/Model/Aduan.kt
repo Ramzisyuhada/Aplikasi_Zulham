@@ -14,6 +14,9 @@ class Aduan   {
     var File = ArrayList<File>()
     constructor()
 
+    constructor(File : File ){
+        this.videoFile = File
+    }
 
     constructor(DeskripsiMasalah: String, Lokasi: Alamat,File: ArrayList<File>){
         this.DeskripsiMasalah = DeskripsiMasalah

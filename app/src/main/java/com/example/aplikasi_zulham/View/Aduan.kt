@@ -50,9 +50,9 @@ class Aduan : Fragment() {
     ): View? {
         _binding = FragmentAduanBinding.inflate(inflater, container, false)
 
-        val list = ArrayList<SlideModel>()
-        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
-        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
+//        val list = ArrayList<SlideModel>()
+//        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
+//        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
 
 
         lifecycleScope.launch {
@@ -73,7 +73,13 @@ class Aduan : Fragment() {
                     val IdComplaint = DataOnject.getInt("id_complaint")
                     val ComplaintDate = DataOnject.getString("complaint_date")
                     val Date = ComplaintDate.split(" ")
+                    // Variable Menyimpan Path Video
 
+
+
+                    val media = ArrayList<com.example.aplikasi_zulham.Model.Aduan>().apply {
+                        Aduan()
+                    }
                     binding.NamapenggunaID.text = Username
                     binding.DeskripsiTourisgGuidIDs.text = Complaint
                     binding.NomerAduanID.text = "#0000" + IdComplaint.toString()
@@ -81,7 +87,7 @@ class Aduan : Fragment() {
                 }
             }
         }
-        binding.imageSlider.setImageList(list)
+      //  binding.imageSlider.setImageList(list)
         return binding.root
     }
 
