@@ -62,6 +62,7 @@ class TambahFragment : Fragment() {
     var File = ArrayList<File>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        datalaporan = ViewModelProvider(requireActivity())[ViewModelAduan::class.java] // ⬅️ pindah ke sini
 
     }
 

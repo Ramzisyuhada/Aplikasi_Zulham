@@ -35,8 +35,9 @@ class UserController {
     fun Register(user: User, view: View): Int {
         val usernameEdit: EditText = view.findViewById(R.id.registerusername)
         val emailEdit: EditText = view.findViewById(R.id.registeremail)
-        val passwordLayout: TextInputLayout = view.findViewById(R.id.passwordEditText)
-        val passwordLayout2: TextInputLayout = view.findViewById(R.id.passwordEditText2)
+        val passwordLayout: TextInputLayout = view.findViewById(R.id.registerpassword)
+        val passwordLayout2: TextInputLayout = view.findViewById(R.id.registerpasswordsama)
+
         var hasil = 1
         if (user.Username.isEmpty()) {
             usernameEdit.error = "Username tidak boleh kosong"

@@ -1,13 +1,17 @@
 package com.example.aplikasi_zulham.View
 
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
@@ -102,7 +106,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun loadData() {
+    private fun loadData(dialog: Dialog) {
         val controller = AduanController()
         val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("token", null)
@@ -112,7 +116,15 @@ class HomeFragment : Fragment() {
             val dataArray = json?.getJSONArray("data")
 
             if (dataArray != null) {
-                    for (i in 0 until dataArray.length()) {
+                var selesai = 0
+                val total = dataArray.length()
+
+                if (total == 0) {
+                    dialog.dismiss()
+                    return@launch
+                }
+
+                for (i in 0 until total) {
                     val item = dataArray.getJSONObject(i)
                     val username = item.getJSONObject("user").getString("username")
                     val complaint = item.getString("complaint")
@@ -132,13 +144,22 @@ class HomeFragment : Fragment() {
                             )
                         )
 
+                        selesai++
+
+                        // Update adapter
                         requireActivity().runOnUiThread {
                             adapterBerita.updateData(beritaList.take(3))
                             adapterBerita.notifyDataSetChanged()
+                        }
 
+                        // Jika semua data sudah selesai dimuat
+                        if (selesai == total) {
+                            dialog.dismiss()
                         }
                     }
                 }
+            } else {
+                dialog.dismiss()
             }
         }
     }
@@ -218,7 +239,15 @@ class HomeFragment : Fragment() {
         bottomNav.visibility = View.VISIBLE
 
         setupRecyclerView()
-        loadData()
+
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.loading)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        loadData(dialog)
 
 
         val list = ArrayList<SlideModel>()

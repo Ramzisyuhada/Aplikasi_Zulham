@@ -80,6 +80,8 @@ class Aduan : Fragment() {
                     val media = ArrayList<com.example.aplikasi_zulham.Model.Aduan>().apply {
                         Aduan()
                     }
+
+
                     binding.NamapenggunaID.text = Username
                     binding.DeskripsiTourisgGuidIDs.text = Complaint
                     binding.NomerAduanID.text = "#0000" + IdComplaint.toString()
