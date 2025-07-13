@@ -1,5 +1,8 @@
 package com.example.aplikasi_zulham.View
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.transition.Slide
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.lifecycleScope
 import com.denzcoskun.imageslider.constants.ScaleTypes
@@ -50,12 +54,10 @@ class Aduan : Fragment() {
     ): View? {
         _binding = FragmentAduanBinding.inflate(inflater, container, false)
 
-//        val list = ArrayList<SlideModel>()
-//        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
-//        list.add(SlideModel( R.drawable.image, ScaleTypes.FIT))
-
 
         lifecycleScope.launch {
+
+
             val id_complaint = arguments?.getInt("id_complaint")
             Log.d("ID_COMPLAINT", id_complaint.toString())
 

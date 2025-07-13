@@ -110,9 +110,10 @@ class HomeFragment : Fragment() {
         val controller = AduanController()
         val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("token", null)
+        val IdDestinasi = prefs.getInt("DestinasiID", -1)
 
         lifecycleScope.launch {
-            val json = token?.let { controller.GetAllAduan(1, it) }
+            val json = token?.let { controller.GetAllAduan(IdDestinasi, it) }
             val dataArray = json?.getJSONArray("data")
 
             if (dataArray != null) {
@@ -146,7 +147,6 @@ class HomeFragment : Fragment() {
 
                         selesai++
 
-                        // Update adapter
                         requireActivity().runOnUiThread {
                             adapterBerita.updateData(beritaList.take(3))
                             adapterBerita.notifyDataSetChanged()
@@ -184,7 +184,7 @@ class HomeFragment : Fragment() {
         }
 
         if (imagePath != null) {
-            val fullUrl = "http://192.168.1.11:8000$imagePath" // Ganti dengan domain kamu
+            val fullUrl = "http://192.168.1.3:8000$imagePath" // Ganti dengan domain kamu
 
             Glide.with(requireContext())
                 .asBitmap()

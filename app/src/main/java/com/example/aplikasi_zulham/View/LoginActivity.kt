@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.aplikasi_zulham.Controller.UserController
@@ -38,7 +39,7 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         networkHelper.startNetworkCallback()
 
 
-        val kategori = arrayOf("kuta", "bukit merese", "pantai", "sirkuit mandalika")
+        val kategori = arrayOf("Kuta", "Bukit Merese", "Pantai", "Sirkuit Mandalika")
         val adapter = ArrayAdapter(
             this, R.layout.simple_spinner_item, kategori
         )
@@ -66,11 +67,7 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
             val username = binding.usernameEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             val hasil = userController.Login(User(username,password),window.decorView.rootView)
-//            if (username.isEmpty() && password.isEmpty()) {
-//                binding.loginpassword.error = "Password Tidak Boleh Kosong"
-//                binding.loginusername.error = "Nama Tidak Boleh Kosong"
-//                return@setOnClickListener
-//            }
+
 
 
             if (username.isEmpty()) {
@@ -87,29 +84,33 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
             }
 
             binding.loginusername.error = null
-            val intent = Intent(this, MainActivity::class.java)
-            if (hasil == 1){
-                intent.putExtra("username", username)
-                startActivity(intent)
-
-            }
 
             lifecycleScope.launch {
                 val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
                 val controller = UsersController()
-                val (token, role) = controller.Login(users)
+                val result = controller.Login(users)
 
+                val (token, role) = result.first
+                val (id, username) = result.second
                 if (token != null && role != null) {
+
                     val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
                     prefs.edit()
                         .putString("token", token)
                         .putString("role", role)
+                        .putInt("id", id ?: -1)
+                        .putString("username",username)
+                        .putInt("DestinasiID",binding.PilihanDestinasi.selectedItemPosition+1)
+                        .putString("NamaDestinasi",binding.PilihanDestinasi.selectedItem.toString())
                         .apply()
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra("username", username)
                     startActivity(intent)
                     finish()
+                }else{
+                    Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
+
                 }
             }
 

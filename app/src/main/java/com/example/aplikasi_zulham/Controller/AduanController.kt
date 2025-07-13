@@ -15,6 +15,8 @@ import retrofit2.Response
 import java.io.File
 
 class AduanController {
+
+
     suspend fun AddAduan(aduan: Aduan, token: String,Alamat :String): Boolean {
         return try {
             val complaint = aduan.DeskripsiMasalah.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -87,7 +89,7 @@ class AduanController {
                 val bodyString = Response.body()?.string()
 
                 Log.d("POST", "Pesan : $bodyString")
-                JSONObject(bodyString ?: "{}") // handle kalau null
+                JSONObject(bodyString ?: "{}")
             }else{
                 val errorString = Response.errorBody()?.string()
                 Log.e("POST", "Error body : $errorString")

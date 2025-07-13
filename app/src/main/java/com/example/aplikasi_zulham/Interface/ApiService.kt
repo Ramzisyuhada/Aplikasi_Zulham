@@ -3,6 +3,7 @@ package com.example.aplikasi_zulham.Interface
 import CuacaResponse
 import com.example.aplikasi_zulham.Model.Aduan
 import com.example.aplikasi_zulham.Model.Cuaca
+import com.example.aplikasi_zulham.Model.Rating
 import com.example.aplikasi_zulham.repository.LoginResponse
 import com.example.aplikasi_zulham.repository.Users
 import okhttp3.MultipartBody
@@ -55,4 +56,23 @@ interface ApiService {
 
     @GET("complaints/{id}")
     suspend fun getComplaintById(@Path("id") id: Int):Response<ResponseBody>
+
+    @JvmSuppressWildcards
+
+    @POST("ratings")
+    suspend fun AddRating(@Body rating: Map<String, Any>): Response<Any>
+    @GET("ratings")
+    suspend fun GetRating(@Query("id_users") userId: Int ,  @Query("id_tour") IdRating: Int):Response<ResponseBody>
+
+    @GET("ratings")
+    suspend fun GetAllRating():Response<ResponseBody>
+
+    @POST("logout")
+    suspend fun Logout():Response<ResponseBody>
+
+    /*
+    * API ADMIIN
+    * */
+
+
 }

@@ -216,6 +216,7 @@
 
                     <!-- Jumlah ulasan -->
                     <TextView
+                        android:id="@+id/JumlahUlasan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="41.312"

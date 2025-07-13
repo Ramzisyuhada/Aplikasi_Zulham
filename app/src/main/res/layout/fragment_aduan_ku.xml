@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AduanKu">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,15 +19,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- SATU LinearLayout yang berisi semuanya -->
             <LinearLayout
-                android:id="@+id/cardContainer"
+                android:id="@+id/CekAduan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:gravity="center_horizontal"
-                android:clipChildren="false"
-                android:clipToPadding="false" />
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:visibility="gone"
+
+                    android:id="@+id/emptyStateGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="24dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/cry1"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="Gambar tidak ada aduan" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Belum Ada Aduan"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        android:layout_marginTop="16dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false" />
+
+            </LinearLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

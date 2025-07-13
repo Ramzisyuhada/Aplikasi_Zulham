@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.aplikasi_zulham.ListAdmin
 import com.example.aplikasi_zulham.ListAduan
 
 import com.example.aplikasi_zulham.R
@@ -65,7 +66,6 @@ class Admin : Fragment() {
             mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
             mapView.setMultiTouchControls(true)
 
-            // Inisialisasi lokasi awal (Kecamatan Pujut) dan level zoom
             val kecamatanPujut = GeoPoint(-8.899022, 116.296767)
             mapView.controller?.apply {
                 setZoom(13.5)
@@ -91,7 +91,8 @@ class Admin : Fragment() {
             val marker = Marker(mapView)
             marker.position = point
             marker.setOnMarkerClickListener { m, _ ->
-                replaceFragment(ListAduan())
+
+                replaceFragment(ListAdmin())
                 true
             }
             mapView.overlays.add(marker)

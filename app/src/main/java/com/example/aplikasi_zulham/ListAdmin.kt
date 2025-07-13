@@ -1,6 +1,7 @@
 package com.example.aplikasi_zulham
 
 import android.app.Dialog
+import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -17,7 +18,6 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -25,15 +25,12 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.aplikasi_zulham.Controller.AduanController
 import com.example.aplikasi_zulham.View.Aduan
 import com.example.aplikasi_zulham.databinding.FragmentListtAduanBinding
-import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,10 +40,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListtAduan.newInstance] factory method to
+ * Use the [ListAdmin.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListAduan : Fragment() {
+class ListAdmin : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
     private var _binding: FragmentListtAduanBinding? = null
     private val binding get() = _binding!!
 
@@ -69,7 +70,11 @@ class ListAduan : Fragment() {
             val controller = AduanController()
             val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val token = prefs.getString("token", null)
-            val json = token?.let { controller.GetAllAduan(1, it) }
+            val id = prefs.getInt("DestinasiID",-1)
+            Log.d("JSON_RESPONSE", token.toString())
+
+            val json = token?.let { controller.GetAllAduan(id, it) }
+
             val jsonArray = json?.getJSONArray("data")
 
             if (jsonArray == null || jsonArray.length() == 0) {
@@ -114,6 +119,27 @@ class ListAduan : Fragment() {
         }
 
         return binding.root
+    }
+
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment ListAdmin.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            ListAdmin().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 
     private fun replaceFragment(fragment: Fragment) {
