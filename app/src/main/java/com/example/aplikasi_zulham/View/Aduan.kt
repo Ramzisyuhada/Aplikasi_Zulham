@@ -16,12 +16,14 @@ import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.lifecycleScope
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
+import com.example.aplikasi_zulham.Adapter.MediaAdapter
 import com.example.aplikasi_zulham.Controller.AduanController
 import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.databinding.FragmentAduanBinding
 import com.example.aplikasi_zulham.databinding.FragmentTambahBinding
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.File
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -75,14 +77,29 @@ class Aduan : Fragment() {
                     val IdComplaint = DataOnject.getInt("id_complaint")
                     val ComplaintDate = DataOnject.getString("complaint_date")
                     val Date = ComplaintDate.split(" ")
+                    val MediaArray = DataOnject.getJSONArray("media")
                     // Variable Menyimpan Path Video
 
+                    Log.d("MEDIA_ARRAY",JSONObject.toString())
+                    var mediaPath: String? = null
+                    var mediaType: String? = null
 
+                    val mediaList  =  ArrayList<com.example.aplikasi_zulham.Model.Aduan>()
+                    val baseUrl = "http://192.168.1.3:8000"
+                    for (i in 0 until MediaArray.length()) {
+                        val mediaObject = MediaArray.getJSONObject(i)
+                        val mediaPath = mediaObject.getString("path")
+                        val mediaType = mediaObject.getString("media_type")
 
-                    val media = ArrayList<com.example.aplikasi_zulham.Model.Aduan>().apply {
-                        Aduan()
+                        val fullUrl = baseUrl + mediaPath
+
+                        val isVideo = mediaType == "video"
+                        val aduan = com.example.aplikasi_zulham.Model.Aduan(File(fullUrl), isVideo)
+
+                        mediaList.add(aduan)
                     }
 
+                    binding.imageSlider.adapter = MediaAdapter(mediaList )
 
                     binding.NamapenggunaID.text = Username
                     binding.DeskripsiTourisgGuidIDs.text = Complaint

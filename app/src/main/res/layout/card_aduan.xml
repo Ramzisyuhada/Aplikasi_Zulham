@@ -12,9 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
-
-        <!-- Icon Cuaca -->
         <ImageView
             android:id="@+id/IconAduanID"
             android:layout_width="0dp"

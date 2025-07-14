@@ -17,7 +17,10 @@ class Aduan   {
     constructor(File : File ){
         this.videoFile = File
     }
-
+    constructor(File : File,isVideo : Boolean ){
+        this.videoFile = File
+        this.isVideo = isVideo
+    }
     constructor(DeskripsiMasalah: String, Lokasi: Alamat,File: ArrayList<File>){
         this.DeskripsiMasalah = DeskripsiMasalah
         this.Lokasi = Lokasi

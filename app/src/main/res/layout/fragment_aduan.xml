@@ -17,26 +17,27 @@
             android:layout_height="wrap_content">
 
             <com.github.islamkhsh.CardSliderViewPager
+                android:id="@+id/image_slider"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:id="@+id/image_slider"
-                android:layout_marginTop="24dp"
-                app:cardSlider_smallScaleFactor="0.9"
+                app:layout_constraintBottom_toTopOf="@+id/indicator"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintDimensionRatio="16:9"
-            app:cardSlider_otherPagesWidth="24dp"
-            app:cardSlider_pageMargin="12dp"
-            app:auto_slide_time="3"/>
+                app:cardSlider_smallScaleFactor="0.9"
+                app:cardSlider_otherPagesWidth="24dp"
+                app:cardSlider_pageMargin="12dp"
+                app:auto_slide_time="3" />
 
             <com.github.islamkhsh.CardSliderIndicator
                 android:layout_width="0dp"
-                app:layout_constraintTop_toBottomOf="@id/image_slider"
+                android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toBottomOf="@id/image_slider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/DesripsiAduanbg"
-                android:layout_height="0dp"
                 android:id="@+id/indicator"
                 app:indicatorsToShow="5" />
 <!--            <com.denzcoskun.imageslider.ImageSlider-->

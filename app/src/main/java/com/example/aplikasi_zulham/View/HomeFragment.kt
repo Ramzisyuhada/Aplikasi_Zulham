@@ -240,14 +240,6 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
 
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.loading)
-        dialog.setCancelable(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
-
-        loadData(dialog)
 
 
         val list = ArrayList<SlideModel>()
@@ -275,6 +267,17 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.loading)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        loadData(dialog)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
