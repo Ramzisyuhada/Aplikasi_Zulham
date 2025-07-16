@@ -85,7 +85,7 @@ class Aduan : Fragment() {
                     var mediaType: String? = null
 
                     val mediaList  =  ArrayList<com.example.aplikasi_zulham.Model.Aduan>()
-                    val baseUrl = "http://192.168.1.3:8000"
+                    val baseUrl = "http://54.206.192.90:8080"
                     for (i in 0 until MediaArray.length()) {
                         val mediaObject = MediaArray.getJSONObject(i)
                         val mediaPath = mediaObject.getString("path")
