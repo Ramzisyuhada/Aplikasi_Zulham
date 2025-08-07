@@ -88,14 +88,23 @@ interface ApiService {
         @Path("id") id: Int
     ): Response<ResponseBody>
 
-    @GET("/complaints/user/{id}")
-    suspend fun GetComplaintUserById(
-        @Path("id") id: Int
+    @GET("complaints/user/{userId}/tour/{tourId}")
+    suspend fun getAllComplaintsByUserAndTour(
+        @Path("userId") userId: Int,
+        @Path("tourId") tourId: Int
     ): Response<ResponseBody>
+    @GET("ratings/tour/{tourId}")
+    suspend fun GetRatingByTour( @Path("tourId") tourId: Int):Response<ResponseBody>
+
+
     /*
     * API ADMIIN
     * */
-    @GET("complaints")
-    suspend fun GetAllAduanAdmin(@Query("id_tour") userId: Int):Response<ResponseBody>
+
+//    /showPengaduan/{id}
+    @GET("admin/complaints/tour/{id_tour}")
+    suspend fun GetAllAduanAdmin(@Path("id_tour") userId: Int):Response<ResponseBody>
+    @GET("showPengaduan/{id}")
+    suspend fun GetAduanbyAdmin(@Path("id") userId: Int):Response<ResponseBody>
 
 }

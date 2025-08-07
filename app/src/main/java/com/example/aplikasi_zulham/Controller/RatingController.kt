@@ -82,7 +82,28 @@ class RatingController {
         }
     }
 
+    suspend fun GetRatingByTour(Token : String,IdTour : Int ):JSONObject {
+        return  try {
+            val Response = AuthInstance.getInstance(Token).GetRatingByTour(IdTour)
+            return if(Response.isSuccessful){
+                val bodyString = Response.body()?.string()
 
+                Log.d("POST", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}")
+            }else{
+                val errorString = Response.errorBody()?.string()
+                Log.e("POST", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+        } catch (e : Exception){
+            Log.e("POST","Error Nya Adalah : " + e.toString())
+
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }
+        }
+    }
     suspend fun UpdateRating(rating: Rating , token : String) : Boolean {
         return try {
             val body = mapOf(

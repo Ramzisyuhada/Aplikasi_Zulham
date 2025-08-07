@@ -64,17 +64,8 @@ class AduanKu : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAduanKuBinding.inflate(inflater,container,false)
-
-//        for (i in 1..5) {
-//            val view = inflater.inflate(R.layout.card_aduan, binding.cardContainer, false)
-//            view.findViewById<ImageView>(R.id.IconAduanID).setImageResource(R.drawable.tahura1)
-//            binding.cardContainer.addView(view)
-//            view.setOnClickListener {
-//                replaceFragment(Aduan())
-//            }
-//        }
+    ): View {
+        _binding = FragmentAduanKuBinding.inflate(inflater, container, false)
 
         val dialogloading = Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -85,55 +76,73 @@ class AduanKu : Fragment() {
         }
 
         lifecycleScope.launch {
-            val controller = AduanController()
-            val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
-            val token = prefs.getString("token", null)
-            val json = token?.let { controller.GetComplaintUserById(it, 2) }
-            val jsonArray = json?.getJSONArray("data")
+            try {
+                val controller = AduanController()
+                val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
+                val token = prefs.getString("token", null)
+                val destinasiId = prefs.getInt("DestinasiID", -1)
+                val userId = prefs.getInt("id", -1)
 
-            if (jsonArray == null || jsonArray.length() == 0) {
+                if (token == null || userId == -1 || destinasiId == -1) {
+                    binding.emptyStateGroup.visibility = View.VISIBLE
+                    dialogloading.dismiss()
+                    return@launch
+                }
+
+                val json = controller.getComplaintAllUserById(token, userId, destinasiId)
+                Log.d("ADUAN KU", "JSON response: $json")
+
+                val status = json?.getString("status")
+                val jsonArray = json?.optJSONArray("data")
+
+                if (status == "success" && jsonArray != null && jsonArray.length() > 0) {
+                    binding.emptyStateGroup.visibility = View.GONE
+
+                    var selesai = 0
+                    val total = jsonArray.length()
+
+                    for (i in 0 until total) {
+                        val item = jsonArray.getJSONObject(i)
+                        val complaint = item.getString("complaint")
+                        val idComplaint = item.getInt("id_complaint")
+                        val complaintDate = item.getString("complaint_date")
+                        val mediaArray = item.getJSONArray("media")
+
+                        ambilGambarDariMedia(mediaArray) { bitmap ->
+                            val view = inflater.inflate(R.layout.card_aduan, binding.cardContainer, false)
+                            view.findViewById<TextView>(R.id.KeluhanID).text = complaint
+                            view.findViewById<ImageView>(R.id.IconAduanID).setImageBitmap(bitmap)
+                            view.findViewById<TextView>(R.id.LamaUploadID).text = convertToCustomFormat(complaintDate)
+                            binding.cardContainer.addView(view)
+
+                            view.setOnClickListener {
+                                val bundle = Bundle().apply {
+                                    putInt("id_complaint", idComplaint)
+                                }
+                                val aduan = Aduan().apply { arguments = bundle }
+                                replaceFragment(aduan)
+                            }
+
+                            selesai++
+                            if (selesai == total) {
+                                dialogloading.dismiss()
+                            }
+                        }
+                    }
+                } else {
+                    binding.emptyStateGroup.visibility = View.VISIBLE
+                    dialogloading.dismiss()
+                }
+            } catch (e: Exception) {
+                Log.e("ADUAN KU", "Error: ${e.message}", e)
                 binding.emptyStateGroup.visibility = View.VISIBLE
                 dialogloading.dismiss()
-                return@launch
-            } else {
-                binding.emptyStateGroup.visibility = View.GONE
-            }
-
-            var selesai = 0
-            val total = jsonArray.length()
-
-            for (i in 0 until total) {
-                val item = jsonArray.getJSONObject(i)
-                val complaint = item.getString("complaint")
-                val idComplaint = item.getInt("id_complaint")
-                val complaintDate = item.getString("complaint_date")
-                val mediaArray = item.getJSONArray("media")
-
-                ambilGambarDariMedia(mediaArray) { bitmap ->
-                    val view = inflater.inflate(R.layout.card_aduan, binding.cardContainer, false)
-                    view.findViewById<TextView>(R.id.KeluhanID).text = complaint
-                    view.findViewById<ImageView>(R.id.IconAduanID).setImageBitmap(bitmap)
-                    view.findViewById<TextView>(R.id.LamaUploadID).text = convertToCustomFormat(complaintDate)
-                    binding.cardContainer.addView(view)
-
-                    view.setOnClickListener {
-                        val bundle = Bundle().apply {
-                            putInt("id_complaint", idComplaint)
-                        }
-                        val aduan = Aduan().apply { arguments = bundle }
-                        replaceFragment(aduan)
-                    }
-
-                    selesai++
-                    if (selesai == total) {
-                        dialogloading.dismiss()
-                    }
-                }
             }
         }
 
         return binding.root
     }
+
     private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
             .replace(R.id.Frame, fragment)

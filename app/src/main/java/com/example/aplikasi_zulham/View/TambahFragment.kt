@@ -2,8 +2,11 @@ package com.example.aplikasi_zulham.View
 
 import Alamat
 import android.Manifest
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -13,6 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -73,6 +77,7 @@ class TambahFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
         bottomNav.visibility = View.GONE
+
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -103,6 +108,13 @@ class TambahFragment : Fragment() {
             dialogSucces.findViewById<TextView>(R.id.TextDialog1).text = "Terima kasih atas aduan Anda."
             dialogSucces.findViewById<Button>(R.id.ok).setOnClickListener {
                 dialog1.dismiss()
+                val dialogloading = Dialog(requireContext()).apply {
+                    requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    setContentView(R.layout.loading)
+                    setCancelable(false)
+                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    show()
+                }
                 val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
                 val token:String  = prefs.getString("token", null).toString()
                 Log.d("TOKEN",token.toString())
@@ -113,13 +125,28 @@ class TambahFragment : Fragment() {
 
                 val Aduan = Aduan(DeskripsiMasalah,Lokasi,datalaporan.ListFile)
                 lifecycleScope.launch {
-                    Controller.AddAduan(Aduan,token,alamat)
+                    try {
+                        // Panggil API
+                        Controller.AddAduan(Aduan, token, alamat)
+
+                        // Setelah sukses, navigasi ke HomeFragment
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.Frame, HomeFragment())
+                            .addToBackStack(null)
+                            .commit()
+
+                        // Clear data
+                        datalaporan.clear()
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(requireContext(), "Gagal kirim aduan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    } finally {
+                        // Tutup loading dialog apapun hasilnya (sukses atau error)
+                        dialogloading.dismiss()
+                    }
                 }
-                parentFragmentManager.beginTransaction()
-                    .replace(com.example.aplikasi_zulham.R.id.Frame, HomeFragment())
-                    .addToBackStack(null)
-                    .commit()
-                datalaporan.clear()
+
             }
 
 

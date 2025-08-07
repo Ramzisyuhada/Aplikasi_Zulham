@@ -24,6 +24,8 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.aplikasi_zulham.Controller.AduanController
 import com.example.aplikasi_zulham.View.Aduan
+import com.example.aplikasi_zulham.View.AduanAdmin
+import com.example.aplikasi_zulham.databinding.FragmentAduanKuBinding
 import com.example.aplikasi_zulham.databinding.FragmentListtAduanBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -70,11 +72,9 @@ class ListAdmin : Fragment() {
             val controller = AduanController()
             val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val token = prefs.getString("token", null)
-            val id = prefs.getInt("DestinasiID",-1)
-            Log.d("JSON_RESPONSE", token.toString())
+            val destinasiId = prefs.getInt("DestinasiID", -1)
 
-            val json = token?.let { controller.GetAllAduan(id, it) }
-
+            val json = token?.let { controller.GetAllAduanAdmin(destinasiId, it) }
             val jsonArray = json?.getJSONArray("data")
 
             if (jsonArray == null || jsonArray.length() == 0) {
@@ -106,7 +106,7 @@ class ListAdmin : Fragment() {
                         val bundle = Bundle().apply {
                             putInt("id_complaint", idComplaint)
                         }
-                        val aduan = Aduan().apply { arguments = bundle }
+                        val aduan = AduanAdmin().apply { arguments = bundle }
                         replaceFragment(aduan)
                     }
 
@@ -119,27 +119,6 @@ class ListAdmin : Fragment() {
         }
 
         return binding.root
-    }
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListAdmin.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListAdmin().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -190,7 +169,7 @@ class ListAdmin : Fragment() {
         }
 
         if (imagePath != null) {
-            val fullUrl = "http://192.168.1.3:8000$imagePath"
+            val fullUrl = "http://13.216.4.3$imagePath"
 
             Glide.with(requireContext())
                 .asBitmap()

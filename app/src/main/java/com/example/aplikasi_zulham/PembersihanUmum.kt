@@ -50,39 +50,57 @@ class PembersihanUmum : Fragment() {
         }
 
         lifecycleScope.launch {
-            val allRatings = token?.let { controller.GetAllRating(it) }
-            val dataArray = allRatings?.getJSONArray("data")
+            val allRatings = token?.let { controller.GetRatingByTour(it, destinasiId) }
+            val status = allRatings?.getString("status")
 
-            if (dataArray != null && dataArray.length() > 0) {
-                var count = IntArray(6)
-                val total = dataArray.length()
-                for (i in 0 until total) {
-                    val value = dataArray.getJSONObject(i).getInt("value")
-                    if (value in 1..5) count[value]++
-                }
+            with(binding) {
+                bar1.max = 100
+                bar2.max = 100
+                bar3.max = 100
+                bar4.max = 100
+                bar5.max = 100
+            }
 
-                with(binding) {
-                    bar1.max = 100
-                    bar2.max = 100
-                    bar3.max = 100
-                    bar4.max = 100
-                    bar5.max = 100
+            if (status == "success") {
+                val dataArray = allRatings?.getJSONArray("data")
+
+                if (dataArray != null && dataArray.length() > 0) {
+                    var count = IntArray(6)
+                    val total = dataArray.length()
+                    for (i in 0 until total) {
+                        val value = dataArray.getJSONObject(i).getInt("value")
+                        if (value in 1..5) count[value]++
+                    }
 
                     val sum = count.sum()
                     if (sum > 0) {
-                        bar1.progress = count[1] * 100 / sum
-                        bar2.progress = count[2] * 100 / sum
-                        bar3.progress = count[3] * 100 / sum
-                        bar4.progress = count[4] * 100 / sum
-                        bar5.progress = count[5] * 100 / sum
+                        with(binding) {
+                            bar1.progress = count[1] * 100 / sum
+                            bar2.progress = count[2] * 100 / sum
+                            bar3.progress = count[3] * 100 / sum
+                            bar4.progress = count[4] * 100 / sum
+                            bar5.progress = count[5] * 100 / sum
 
-                        JumlahUlasan.text = sum.toString()
-                        val totalValue = count.indices.sumBy { it * count[it] }
-                        val rataRata = totalValue.toFloat() / sum
-
-                        JumlahRatingID.text = String.format("%.1f", rataRata)
-                        ratingBar.rating = rataRata
+                            JumlahUlasan.text = sum.toString()
+                            val totalValue = count.indices.sumBy { it * count[it] }
+                            val rataRata = totalValue.toFloat() / sum
+                            JumlahRatingID.text = String.format("%.1f", rataRata)
+                            ratingBar.rating = rataRata
+                        }
                     }
+                }
+            } else {
+                // Jika status bukan success (contohnya error), atur semua nilai menjadi 0
+                with(binding) {
+                    bar1.progress = 0
+                    bar2.progress = 0
+                    bar3.progress = 0
+                    bar4.progress = 0
+                    bar5.progress = 0
+
+                    JumlahUlasan.text = "0"
+                    JumlahRatingID.text = "0.0"
+                    ratingBar.rating = 0f
                 }
             }
 
@@ -104,8 +122,12 @@ class PembersihanUmum : Fragment() {
         val destinasiId = prefs.getInt("DestinasiID", -1)
         val namaDestinasi = prefs.getString("NamaDestinasi", null)
 
-        val controller = RatingController()
+        if (token == null || username == null || namaDestinasi == null) {
+            Toast.makeText(requireContext(), "Data user tidak lengkap", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        val controller = RatingController()
         val header = requireActivity().findViewById<TextView>(R.id.head)
         header.text = "SKOR"
 
@@ -123,24 +145,28 @@ class PembersihanUmum : Fragment() {
             namaTempatText.text = namaDestinasi
 
             lifecycleScope.launch {
-                val existingRating = token?.let { controller.GetRatingById(userId, destinasiId, it) }
-                val dataArray = existingRating?.getJSONArray("data")
-
+                val existingRating = controller.GetRatingById(userId, destinasiId, token)
+                val status = existingRating?.getString("status")
                 var ratingId = -1
-                if (dataArray != null && dataArray.length() > 0) {
-                    val ratingObj = dataArray.getJSONObject(0)
-                    ratingBar.rating = ratingObj.getInt("value").toFloat()
-                    ratingId = ratingObj.getInt("id_rating")
+
+                if (status == "success") {
+                    val dataArray = existingRating.getJSONArray("data")
+                    if (dataArray.length() > 0) {
+                        val ratingObj = dataArray.getJSONObject(0)
+                        ratingBar.rating = ratingObj.getInt("value").toFloat()
+                        ratingId = ratingObj.getInt("id_rating")
+                    }
                 }
 
                 lanjutButton.setOnClickListener {
                     val ratingValue = ratingBar.rating.toInt()
                     val rating = Rating(ratingValue, ratingId)
+
                     lifecycleScope.launch {
                         val success = if (ratingId == -1) {
-                            controller.AddRating(rating, token!!)
+                            controller.AddRating(rating, token)
                         } else {
-                            controller.UpdateRating(rating, token!!)
+                            controller.UpdateRating(rating, token)
                         }
 
                         if (success) {
@@ -165,6 +191,7 @@ class PembersihanUmum : Fragment() {
             }
         }
     }
+
 
     private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction()

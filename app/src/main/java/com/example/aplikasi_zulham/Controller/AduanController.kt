@@ -81,30 +81,28 @@ class AduanController {
                 put("error", e.message ?: "Unknown exception")
             }        }
     }
-    suspend fun GetComplaintUserById(token : String,IdUser : Int):JSONObject{
+    suspend fun getComplaintAllUserById(token: String, userId: Int, tourId: Int): JSONObject {
         return try {
+            val response = AuthInstance.getInstance(token).getAllComplaintsByUserAndTour(userId, tourId)
 
-
-            val response = AuthInstance.getInstance(token).getComplaintById(IdUser)
-            return if (response.isSuccessful) {
+            if (response.isSuccessful) {
                 val bodyString = response.body()?.string()
-
-                Log.d("PROFILE", "Pesan : $bodyString")
+                Log.d("PROFILE", "Response: $bodyString")
                 JSONObject(bodyString ?: "{}")
             } else {
                 val errorString = response.errorBody()?.string()
-                Log.e("PROFILE", "Error body : $errorString")
-
-                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+                Log.e("PROFILE", "Error body: $errorString")
+                JSONObject(errorString ?: """{"error":"Unknown error"}""")
             }
 
         } catch (e: Exception) {
-            Pair("exception", e.localizedMessage)
+            Log.e("PROFILE", "Exception: ${e.message}", e)
             JSONObject().apply {
-                put("PROFILE", e.message ?: "Unknown exception")
+                put("error", e.message ?: "Unknown exception")
             }
         }
     }
+
     suspend fun GetAllAduan(id:Int,Token:String):JSONObject{
         return try {
             val Response = AuthInstance.getInstance(Token).GetAllAduan(id)
@@ -130,7 +128,7 @@ class AduanController {
 
     suspend fun GetAllAduanAdmin(id:Int,Token:String):JSONObject{
         return try {
-            val Response = AuthInstance.getInstance(Token).GetAllAduan(id)
+            val Response = AuthInstance.getInstance(Token).GetAllAduanAdmin(id)
             return if(Response.isSuccessful){
                 val bodyString = Response.body()?.string()
 
@@ -150,5 +148,27 @@ class AduanController {
             }
         }
     }
+    suspend fun GetAduanByIdAdmin (Id : Int,Token: String):JSONObject{
+        return try {
+            val Response = AuthInstance.getInstance(Token).GetAduanbyAdmin(Id)
+            return if(Response.isSuccessful){
+                val bodyString = Response.body()?.string()
+
+                Log.d("POST", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}") // handle kalau null
+            }else{
+                val errorString = Response.errorBody()?.string()
+                Log.e("POST", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+
+        }catch (e : Exception){
+            Log.e("POST","Error Nya Adalah : " + e.toString())
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }        }
+    }
+
 
 }

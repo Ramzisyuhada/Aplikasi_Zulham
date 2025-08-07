@@ -66,7 +66,6 @@ class Aduan : Fragment() {
             val Controller = AduanController()
             val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val token = prefs.getString("token", null)
-
             id_complaint?.let { id ->
                 token?.let { token ->
                    val JSONObject= Controller.GetAduanById(id, token)
@@ -95,6 +94,7 @@ class Aduan : Fragment() {
 
                         val isVideo = mediaType == "video"
                         val aduan = com.example.aplikasi_zulham.Model.Aduan(File(fullUrl), isVideo)
+                        Log.d("URL",fullUrl)
 
                         mediaList.add(aduan)
                     }

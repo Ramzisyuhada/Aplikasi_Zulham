@@ -69,7 +69,9 @@ class ListAduan : Fragment() {
             val controller = AduanController()
             val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val token = prefs.getString("token", null)
-            val json = token?.let { controller.GetAllAduan(1, it) }
+            val destinasiId = prefs.getInt("DestinasiID", -1)
+
+            val json = token?.let { controller.GetAllAduan(destinasiId, it) }
             val jsonArray = json?.getJSONArray("data")
 
             if (jsonArray == null || jsonArray.length() == 0) {
