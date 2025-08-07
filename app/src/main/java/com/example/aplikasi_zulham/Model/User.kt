@@ -9,6 +9,7 @@ class User {
     var Email : String = ""
     var Role : String = ""
     var Token : String = ""
+
     constructor(Username : String ,Password : String,Password2 : String  , Email : String ,  Role : String ,Token : String){
         this.Username = Username
         this.Password2 = Password2
@@ -30,4 +31,12 @@ class User {
         this.Password = Password
         this.Username = Username
     }
+
+    constructor(Username : String , Password: String,Email : String){
+        this.Password = Password
+        this.Username = Username
+        this.Email = Email
+
+    }
+
 }

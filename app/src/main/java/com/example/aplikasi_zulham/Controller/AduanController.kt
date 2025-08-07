@@ -81,7 +81,30 @@ class AduanController {
                 put("error", e.message ?: "Unknown exception")
             }        }
     }
+    suspend fun GetComplaintUserById(token : String,IdUser : Int):JSONObject{
+        return try {
 
+
+            val response = AuthInstance.getInstance(token).getComplaintById(IdUser)
+            return if (response.isSuccessful) {
+                val bodyString = response.body()?.string()
+
+                Log.d("PROFILE", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}")
+            } else {
+                val errorString = response.errorBody()?.string()
+                Log.e("PROFILE", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+
+        } catch (e: Exception) {
+            Pair("exception", e.localizedMessage)
+            JSONObject().apply {
+                put("PROFILE", e.message ?: "Unknown exception")
+            }
+        }
+    }
     suspend fun GetAllAduan(id:Int,Token:String):JSONObject{
         return try {
             val Response = AuthInstance.getInstance(Token).GetAllAduan(id)
@@ -105,6 +128,27 @@ class AduanController {
         }
     }
 
+    suspend fun GetAllAduanAdmin(id:Int,Token:String):JSONObject{
+        return try {
+            val Response = AuthInstance.getInstance(Token).GetAllAduan(id)
+            return if(Response.isSuccessful){
+                val bodyString = Response.body()?.string()
 
+                Log.d("POST", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}")
+            }else{
+                val errorString = Response.errorBody()?.string()
+                Log.e("POST", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+
+        }catch (e : Exception){
+            Log.e("POST","Error Nya Adalah : " + e.toString())
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }
+        }
+    }
 
 }

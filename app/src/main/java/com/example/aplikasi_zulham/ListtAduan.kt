@@ -164,7 +164,7 @@ class ListAduan : Fragment() {
         }
 
         if (imagePath != null) {
-            val fullUrl = "http://54.206.192.90:8080$imagePath"
+            val fullUrl = "http://13.216.4.3$imagePath"
 
             Glide.with(requireContext())
                 .asBitmap()

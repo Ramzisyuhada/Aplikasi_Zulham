@@ -5,18 +5,13 @@ import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Debug
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.RatingBar
-import android.widget.TextView
-import android.widget.Toast
-import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.Controller.RatingController
@@ -26,235 +21,160 @@ import com.example.aplikasi_zulham.databinding.FragmentPembersihanUmumBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PembersihanUmum.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PembersihanUmum : Fragment() {
-
 
     private var _binding: FragmentPembersihanUmumBinding? = null
     private val binding get() = _binding!!
 
-
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPembersihanUmumBinding.inflate(inflater, container, false)
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.NavButton)
         bottomNav.visibility = View.GONE
+
         val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("token", null)
-        val Id = prefs.getInt("id", -1)
-        val IdDestinasi = prefs.getInt("DestinasiID", -1)
+        val userId = prefs.getInt("id", -1)
+        val destinasiId = prefs.getInt("DestinasiID", -1)
 
-        val Controller = RatingController()
+        val controller = RatingController()
 
-
-        val dialogloading = Dialog(requireContext())
-        dialogloading.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogloading.setContentView(R.layout.loading)
-        dialogloading.setCancelable(false)
-        dialogloading.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogloading.show()
+        val loadingDialog = Dialog(requireContext()).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.loading)
+            setCancelable(false)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            show()
+        }
 
         lifecycleScope.launch {
-            var selesai = 0 ;
-            val json = token?.let {
-                Controller.GetRatingById(Id,IdDestinasi,it )
+            val allRatings = token?.let { controller.GetAllRating(it) }
+            val dataArray = allRatings?.getJSONArray("data")
 
-            }
-            val JsonAllRating = token?.let {
-                Controller.GetAllRating(it)
-            }
-            val dataArrayJson = JsonAllRating?.getJSONArray("data")
-            var jumlah =dataArrayJson?.length()
-
-            if (dataArrayJson != null) {
-                if (jumlah  == 0 ){
-                    dialogloading.dismiss()
-                    return@launch
-
-
+            if (dataArray != null && dataArray.length() > 0) {
+                var count = IntArray(6)
+                val total = dataArray.length()
+                for (i in 0 until total) {
+                    val value = dataArray.getJSONObject(i).getInt("value")
+                    if (value in 1..5) count[value]++
                 }
-                var count1 = 0
-                var count2 = 0
-                var count3 = 0
-                var count4 = 0
-                var count5 = 0
-                var jumlahulasan = 0
-                for (i in 0 until dataArrayJson.length()) {
-                    val obj = dataArrayJson.getJSONObject(i)
-                    val value = obj.getInt("value")
-                    selesai++
-                    when (value) {
-                        5 -> count5++
-                        4 -> count4++
-                        3 -> count3++
-                        2 -> count2++
-                        1 -> count1++
+
+                with(binding) {
+                    bar1.max = 100
+                    bar2.max = 100
+                    bar3.max = 100
+                    bar4.max = 100
+                    bar5.max = 100
+
+                    val sum = count.sum()
+                    if (sum > 0) {
+                        bar1.progress = count[1] * 100 / sum
+                        bar2.progress = count[2] * 100 / sum
+                        bar3.progress = count[3] * 100 / sum
+                        bar4.progress = count[4] * 100 / sum
+                        bar5.progress = count[5] * 100 / sum
+
+                        JumlahUlasan.text = sum.toString()
+                        val totalValue = count.indices.sumBy { it * count[it] }
+                        val rataRata = totalValue.toFloat() / sum
+
+                        JumlahRatingID.text = String.format("%.1f", rataRata)
+                        ratingBar.rating = rataRata
                     }
-                    jumlahulasan++
                 }
-                val total = count1 + count2 + count3 + count4 + count5
-                if (total > 0) {
-                    binding.bar5.max = 100
-                    binding.bar4.max = 100
-                    binding.bar3.max = 100
-                    binding.bar2.max = 100
-                    binding.bar1.max = 100
-
-                    binding.bar5.progress = (count5 * 100 / total)
-                    binding.bar4.progress = (count4 * 100 / total)
-                    binding.bar3.progress = (count3 * 100 / total)
-                    binding.bar2.progress = (count2 * 100 / total)
-                    binding.bar1.progress = (count1 * 100 / total)
-                    binding.JumlahUlasan.text = jumlahulasan.toInt().toString()
-                    val totalNilai = count1 * 1 + count2 * 2 + count3 * 3 + count4 * 4 + count5 * 5
-                    val rataRata = totalNilai.toFloat() / total
-
-                    binding.JumlahRatingID.text = rataRata.toString()
-                    binding.ratingBar.rating = rataRata
-
-                }
-                if (jumlah == total){
-                    dialogloading.dismiss()
-                }
-            }else{
-                dialogloading.dismiss()
-
             }
 
-
+            loadingDialog.dismiss()
         }
 
-
-        // Inflate the layout for this fragment
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(com.example.aplikasi_zulham.R.id.NavButton)
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.NavButton)
         bottomNav.visibility = View.GONE
-        binding.bar5.progress = 80
-        val text = requireActivity().findViewById<TextView>(com.example.aplikasi_zulham.R.id.head)
-        text.text = "SKOR"
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.card_review, null)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .create()
+
         val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("token", null)
-        val Id = prefs.getInt("id", -1)
-        val Username = prefs.getString("username",null)
-        val NamaDestinasi = prefs.getString("NamaDestinasi",null)
-        val IdDestinasi = prefs.getInt("DestinasiID", -1)
-        val Controller = RatingController()
+        val userId = prefs.getInt("id", -1)
+        val username = prefs.getString("username", null)
+        val destinasiId = prefs.getInt("DestinasiID", -1)
+        val namaDestinasi = prefs.getString("NamaDestinasi", null)
 
-        /*
-        * Variable Dialog View
-        * */
-        val NamaUserText = dialogView.findViewById<TextView>(R.id.NamaUserID)
-        val NamaTempat  = dialogView.findViewById<TextView>(R.id.NamaTempatID)
+        val controller = RatingController()
 
-        NamaUserText.text = Username
-        NamaTempat.text = NamaDestinasi
+        val header = requireActivity().findViewById<TextView>(R.id.head)
+        header.text = "SKOR"
 
         binding.ButtonUlasanID.setOnClickListener {
-            val batalbutton = dialogView.findViewById<Button>(R.id.DialogBtnClose1)
-            val LanjutButton = dialogView.findViewById<Button>(R.id.LanjutBtnID)
-            val dialogSucces = LayoutInflater.from(requireContext()).inflate(R.layout.alertdialog_succes_ulasan, null)
-            val dialog1 = AlertDialog.Builder(requireContext())
-                .setView(dialogSucces)
-                .create()
-            var Ratingbar = dialogView.findViewById<RatingBar>(R.id.ratingBar);
+            val reviewView = LayoutInflater.from(requireContext()).inflate(R.layout.card_review, null)
+            val dialog = AlertDialog.Builder(requireContext()).setView(reviewView).create()
+
+            val namaUserText = reviewView.findViewById<TextView>(R.id.NamaUserID)
+            val namaTempatText = reviewView.findViewById<TextView>(R.id.NamaTempatID)
+            val ratingBar = reviewView.findViewById<RatingBar>(R.id.ratingBar)
+            val batalButton = reviewView.findViewById<Button>(R.id.DialogBtnClose1)
+            val lanjutButton = reviewView.findViewById<Button>(R.id.LanjutBtnID)
+
+            namaUserText.text = username
+            namaTempatText.text = namaDestinasi
+
             lifecycleScope.launch {
-                val Object = Controller.GetRatingById(Id, IdDestinasi, token.toString())
-                val dataArray = Object.getJSONArray("data")
-                if (dataArray.length() > 0) {
-                    Log.d("UMUM",dataArray.toString())
+                val existingRating = token?.let { controller.GetRatingById(userId, destinasiId, it) }
+                val dataArray = existingRating?.getJSONArray("data")
 
+                var ratingId = -1
+                if (dataArray != null && dataArray.length() > 0) {
                     val ratingObj = dataArray.getJSONObject(0)
-                    val ratingValue = ratingObj.getInt("value")
-                    Ratingbar.rating = ratingValue.toFloat()
-                }else{
-                    LanjutButton.setOnClickListener {
-                        val buttonclose = dialogSucces.findViewById<Button>(R.id.ok)
-                        val ValueRating = Rating(Ratingbar.rating.toInt())
-                        lifecycleScope.launch {
+                    ratingBar.rating = ratingObj.getInt("value").toFloat()
+                    ratingId = ratingObj.getInt("id_rating")
+                }
 
-                            val Response = Controller.AddRating(ValueRating, token.toString());
-                            if (Response){
-                                dialog1.show()
-                                buttonclose.setOnClickListener {
-
-
-
-                                    dialog1.dismiss()
-                                    replaceFragment(HomeFragment())
-
-                                }
-                            }else{
-                                Toast.makeText(requireContext(), "Gagal", Toast.LENGTH_SHORT).show()
-                            }
+                lanjutButton.setOnClickListener {
+                    val ratingValue = ratingBar.rating.toInt()
+                    val rating = Rating(ratingValue, ratingId)
+                    lifecycleScope.launch {
+                        val success = if (ratingId == -1) {
+                            controller.AddRating(rating, token!!)
+                        } else {
+                            controller.UpdateRating(rating, token!!)
                         }
 
-                        dialog.dismiss()
+                        if (success) {
+                            val successView = LayoutInflater.from(requireContext()).inflate(R.layout.alertdialog_succes_ulasan, null)
+                            val successDialog = AlertDialog.Builder(requireContext()).setView(successView).create()
+                            successDialog.show()
+
+                            val closeBtn = successView.findViewById<Button>(R.id.ok)
+                            closeBtn.setOnClickListener {
+                                successDialog.dismiss()
+                                dialog.dismiss()
+                                replaceFragment(HomeFragment())
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Gagal menyimpan rating", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
 
-            batalbutton.setOnClickListener {
-                dialog.dismiss()
+                batalButton.setOnClickListener { dialog.dismiss() }
+                dialog.show()
             }
-            dialog.show()
         }
-
-
     }
+
     private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
             .replace(R.id.Frame, fragment)
-
             .addToBackStack(null)
             .commit()
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PembersihanUmum.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PembersihanUmum().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

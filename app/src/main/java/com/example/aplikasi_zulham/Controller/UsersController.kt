@@ -1,12 +1,14 @@
 package com.example.aplikasi_zulham.Controller
 
 import android.util.Log
+import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.Retrofit.AuthInstance
 import com.example.aplikasi_zulham.Retrofit.UserInstance
 import com.example.aplikasi_zulham.repository.LoginResponse
 import com.example.aplikasi_zulham.repository.Users
 import com.example.aplikasi_zulham.repository.UsersLogin
 import com.google.gson.Gson
+import org.json.JSONObject
 import retrofit2.Response
 
 class UsersController {
@@ -28,8 +30,30 @@ class UsersController {
         }
     }
 
+    suspend fun GetUserById(token : String,IdUser : Int):JSONObject {
+        return try {
 
 
+            val response = AuthInstance.getInstance(token).GetUserById(IdUser)
+            return if (response.isSuccessful) {
+                val bodyString = response.body()?.string()
+
+                Log.d("PROFILE", "Pesan : $bodyString")
+                JSONObject(bodyString ?: "{}")
+            } else {
+                val errorString = response.errorBody()?.string()
+                Log.e("PROFILE", "Error body : $errorString")
+
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+
+        } catch (e: Exception) {
+            Pair("exception", e.localizedMessage)
+            JSONObject().apply {
+                put("PROFILE", e.message ?: "Unknown exception")
+            }
+        }
+    }
     suspend fun ResetPassword(user : Users) : String
     {
         return try {
@@ -106,6 +130,25 @@ class UsersController {
             false
         }
     }
+
+    suspend fun  UpdateUser(token : String,users: User,IdUser : Int) : Boolean{
+        return  try {
+            val body = mapOf(
+                "username" to users.Username,
+                "password" to users.Password,
+                "email" to users.Email
+            )
+            val Response = AuthInstance.getInstance(token).UpdateUser(IdUser,body)
+            if (Response.isSuccessful) {
+                true
+            } else {
+                false
+            }
+        }catch (e: Exception) {
+            false
+        }
+    }
+
 
 
 

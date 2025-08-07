@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.example.aplikasi_zulham.Helper.NetworkHelper
+import com.example.aplikasi_zulham.ListAdmin
 import com.example.aplikasi_zulham.R
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityMainBinding
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         val username = intent.getStringExtra("username") ?: ""
 
         if (role == "admin"){
-            replaceFragment(Admin())
+            replaceFragment(ListAdmin())
             Log.d("Role",username)
 
             binding.NavButton.visibility = View.GONE

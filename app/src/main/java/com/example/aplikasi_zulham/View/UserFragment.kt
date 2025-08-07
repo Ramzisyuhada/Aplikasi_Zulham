@@ -42,7 +42,6 @@ class UserFragment : Fragment() {
         _binding = FragmentUserBinding.inflate(inflater,container,false)
 
         binding.cardprofile.setOnClickListener {
-            Toast.makeText(requireContext(), "Card ditekan!", Toast.LENGTH_SHORT).show()
 
             replaceFragment(Profile())
 

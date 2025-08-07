@@ -16,6 +16,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -64,15 +65,37 @@ interface ApiService {
     @GET("ratings")
     suspend fun GetRating(@Query("id_users") userId: Int ,  @Query("id_tour") IdRating: Int):Response<ResponseBody>
 
-    @GET("ratings")
+    @GET("get-rating")
     suspend fun GetAllRating():Response<ResponseBody>
+
+    @PUT("ratings/{id}")
+    suspend fun UpdateRating(
+        @Path("id") id: Int,
+        @Body rating: Map<String, @JvmSuppressWildcards Any>
+    ): Response<Any>
 
     @POST("logout")
     suspend fun Logout():Response<ResponseBody>
 
+    @PUT("users/{id}")
+    suspend fun UpdateUser(
+        @Path("id") id: Int,
+        @Body rating: Map<String, @JvmSuppressWildcards Any>
+    ): Response<Any>
+
+    @GET("users/{id}")
+    suspend fun GetUserById(
+        @Path("id") id: Int
+    ): Response<ResponseBody>
+
+    @GET("/complaints/user/{id}")
+    suspend fun GetComplaintUserById(
+        @Path("id") id: Int
+    ): Response<ResponseBody>
     /*
     * API ADMIIN
     * */
-
+    @GET("complaints")
+    suspend fun GetAllAduanAdmin(@Query("id_tour") userId: Int):Response<ResponseBody>
 
 }

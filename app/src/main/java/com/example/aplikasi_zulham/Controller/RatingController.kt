@@ -59,7 +59,7 @@ class RatingController {
             }
         }
     }
-    suspend fun GetAllRating(Token : String):JSONObject {
+    suspend fun GetAllRating(Token : String ):JSONObject {
         return  try {
             val Response = AuthInstance.getInstance(Token).GetAllRating()
             return if(Response.isSuccessful){
@@ -79,6 +79,32 @@ class RatingController {
             JSONObject().apply {
                 put("error", e.message ?: "Unknown exception")
             }
+        }
+    }
+
+
+    suspend fun UpdateRating(rating: Rating , token : String) : Boolean {
+        return try {
+            val body = mapOf(
+                "value" to rating.Value,
+                "comment" to "user.password"
+            )
+
+            val Response = AuthInstance.getInstance(token).UpdateRating(rating.IdRating,body)
+            if(Response.isSuccessful){
+                Log.d("POST","Berhasil Menambahkan Rating")
+                true
+            }else {
+                Log.d("POST","Berhasil Gagal Rating")
+
+                false
+            }
+
+
+
+        } catch (e: Exception) {
+            Log.e("POST", "Server Gangguan", e)
+            false
         }
     }
 }
