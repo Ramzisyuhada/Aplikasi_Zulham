@@ -14,6 +14,8 @@ import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.aplikasi_zulham.Controller.RatingController
 import com.example.aplikasi_zulham.Model.Rating
 import com.example.aplikasi_zulham.View.HomeFragment
@@ -121,6 +123,37 @@ class PembersihanUmum : Fragment() {
         val username = prefs.getString("username", null)
         val destinasiId = prefs.getInt("DestinasiID", -1)
         val namaDestinasi = prefs.getString("NamaDestinasi", null)
+        val namadestinasi = prefs.getString("NamaDestinasi", null)
+        val sliderList = when (namadestinasi) {
+            "Kuta" -> listOf(
+                SlideModel(R.drawable.kuta1, ScaleTypes.FIT),
+                SlideModel(R.drawable.kuta2, ScaleTypes.FIT),
+                SlideModel(R.drawable.kuta3, ScaleTypes.FIT)
+
+            )
+            "Pantai" -> listOf(
+                SlideModel(R.drawable.pantai1, ScaleTypes.FIT),
+                SlideModel(R.drawable.pantai2, ScaleTypes.FIT),
+                SlideModel(R.drawable.pantai3, ScaleTypes.FIT)
+
+            )
+            "Bukit Merese" -> listOf(
+                SlideModel(R.drawable.bukit1, ScaleTypes.FIT),
+                SlideModel(R.drawable.bukit2, ScaleTypes.FIT),
+                SlideModel(R.drawable.bukit3, ScaleTypes.FIT)
+            )
+            "Sirkuit Mandalika" -> listOf(
+                SlideModel(R.drawable.mandalika1, ScaleTypes.FIT),
+                SlideModel(R.drawable.mandalika2, ScaleTypes.FIT),
+                SlideModel(R.drawable.mandalika3, ScaleTypes.FIT)
+            )
+            else -> listOf(
+                SlideModel(R.drawable.tahura1, ScaleTypes.FIT),
+                SlideModel(R.drawable.tahura2, ScaleTypes.FIT)
+            )
+        }
+
+        binding.imageSlider.setImageList(sliderList, ScaleTypes.FIT)
 
         if (token == null || username == null || namaDestinasi == null) {
             Toast.makeText(requireContext(), "Data user tidak lengkap", Toast.LENGTH_SHORT).show()

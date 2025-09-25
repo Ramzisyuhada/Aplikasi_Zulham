@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.Controller.UsersController
@@ -14,6 +15,7 @@ import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.View.HomeFragment
 import com.example.aplikasi_zulham.databinding.FragmentProfileBinding
 import com.example.aplikasi_zulham.databinding.FragmentUserBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,6 +36,12 @@ class Profile : Fragment() {
     private val binding get() = _binding!!
     private var email = ""
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val Linear = requireActivity().findViewById<LinearLayout>(R.id.header)
+        Linear.visibility = View.VISIBLE;
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.NavButton)
+        bottomNav.visibility = View.VISIBLE
+
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)

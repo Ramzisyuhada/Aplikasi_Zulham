@@ -1,6 +1,7 @@
 package com.example.aplikasi_zulham.View
 
 import android.app.Dialog
+import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -188,11 +189,37 @@ class HomeFragment : Fragment() {
 
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.NavButton)
         bottomNav.visibility = View.VISIBLE
+        val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val namadestinasi = prefs.getString("NamaDestinasi", null)
+        val sliderList = when (namadestinasi) {
+            "Kuta" -> listOf(
+                SlideModel(R.drawable.kuta1, ScaleTypes.FIT),
+                SlideModel(R.drawable.kuta2, ScaleTypes.FIT),
+                SlideModel(R.drawable.kuta3, ScaleTypes.FIT)
 
-        val sliderList = listOf(
-            SlideModel(R.drawable.tahura1, ScaleTypes.FIT),
-            SlideModel(R.drawable.tahura2, ScaleTypes.FIT)
-        )
+            )
+            "Pantai" -> listOf(
+                SlideModel(R.drawable.pantai1, ScaleTypes.FIT),
+                SlideModel(R.drawable.pantai2, ScaleTypes.FIT),
+                SlideModel(R.drawable.pantai3, ScaleTypes.FIT)
+
+            )
+            "Bukit Merese" -> listOf(
+                SlideModel(R.drawable.bukit1, ScaleTypes.FIT),
+                SlideModel(R.drawable.bukit2, ScaleTypes.FIT),
+                SlideModel(R.drawable.bukit3, ScaleTypes.FIT)
+            )
+            "Sirkuit Mandalika" -> listOf(
+                SlideModel(R.drawable.mandalika1, ScaleTypes.FIT),
+                SlideModel(R.drawable.mandalika2, ScaleTypes.FIT),
+                SlideModel(R.drawable.mandalika3, ScaleTypes.FIT)
+            )
+            else -> listOf(
+                SlideModel(R.drawable.tahura1, ScaleTypes.FIT),
+                SlideModel(R.drawable.tahura2, ScaleTypes.FIT)
+            )
+        }
+
         binding.imageSlider.setImageList(sliderList, ScaleTypes.FIT)
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

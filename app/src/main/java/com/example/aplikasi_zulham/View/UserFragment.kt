@@ -13,6 +13,7 @@ import com.example.aplikasi_zulham.Controller.UsersController
 import com.example.aplikasi_zulham.Profile
 
 import com.example.aplikasi_zulham.R
+import com.example.aplikasi_zulham.TentangAplikasi
 import com.example.aplikasi_zulham.View.LoginActivity
 import com.example.aplikasi_zulham.databinding.FragmentHomeBinding
 import com.example.aplikasi_zulham.databinding.FragmentUserBinding
@@ -72,6 +73,11 @@ class UserFragment : Fragment() {
                 }
             }
         }
+
+        binding.tentangaplikasi.setOnClickListener {
+            replaceFragment(TentangAplikasi())
+        }
+
     }
     private fun replaceFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction()
