@@ -2,6 +2,7 @@ package com.example.aplikasi_zulham.View
 
 import android.app.Dialog
 import android.content.Context.MODE_PRIVATE
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -47,6 +48,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
         binding.pembersihanumum.setOnClickListener { replaceFragment(PembersihanUmum()) }
         binding.aduanterterbaru.setOnClickListener { replaceFragment(ListAduan()) }
@@ -185,7 +187,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val text = requireActivity().findViewById<TextView>(R.id.head)
-        text.text = "Laporin"
+        text.text = "SIWASPADA"
 
         val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.NavButton)
         bottomNav.visibility = View.VISIBLE

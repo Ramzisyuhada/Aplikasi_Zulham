@@ -96,8 +96,7 @@ class CuacaView : Fragment() {
     private fun setupChart() {
         val mChart = binding.chart
 
-
-
+        // Data suhu
         val dataSet = LineDataSet(datasuhu, "Suhu (°C)").apply {
             color = resources.getColor(R.color.black, null)
             valueTextColor = resources.getColor(R.color.black, null)
@@ -107,38 +106,60 @@ class CuacaView : Fragment() {
             valueTextSize = 12f
         }
 
+        // Set data ke chart
         mChart.data = LineData(dataSet)
         mChart.setTouchEnabled(true)
         mChart.setPinchZoom(true)
         mChart.setScaleEnabled(true)
         mChart.animateX(1000)
 
+        // Deskripsi di bawah chart
         val description = Description().apply {
             text = "Perkiraan Suhu"
             textSize = 14f
         }
         mChart.description = description
 
-        // Atur posisi sumbu Y
+        // Tambahkan offset supaya label tidak mepet tepi
+        mChart.setExtraOffsets(10f, 10f, 10f, 20f)
+
+        // Konfigurasi Y-Axis (kiri)
         val yAxis = mChart.axisLeft
         yAxis.setPosition(com.github.mikephil.charting.components.YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+        yAxis.textSize = 10f
+        yAxis.xOffset = 10f // Jarak label Y dari chart
+        yAxis.enableGridDashedLine(10f, 10f, 0f) // Garis grid horizontal putus-putus
 
-        // Atur sumbu X untuk menampilkan tanggal dan hari
+        // Nonaktifkan Y-Axis kanan
+        mChart.axisRight.isEnabled = false
+
+        // Konfigurasi X-Axis
         val xAxis = mChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.textSize = 10f
+        xAxis.labelRotationAngle = -30f // Putar label biar muat
+        xAxis.setAvoidFirstLastClipping(true) // Label pertama & terakhir tidak kepotong
+        xAxis.yOffset = 10f // Jarak label X dari chart
+        xAxis.enableGridDashedLine(10f, 10f, 0f) // Garis grid vertikal putus-putus
+        xAxis.setDrawGridLines(true) // Pastikan grid vertikal aktif
+        xAxis.granularity = 1f // Supaya tidak ada label dobel
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                // Mengonversi epoch second menjadi waktu dan format menjadi tanggal dan hari
-                val dateTime = OffsetDateTime.ofInstant(java.time.Instant.ofEpochSecond(value.toLong()), java.time.ZoneOffset.UTC).toLocalDateTime()
+                val dateTime = OffsetDateTime.ofInstant(
+                    java.time.Instant.ofEpochSecond(value.toLong()),
+                    java.time.ZoneOffset.UTC
+                ).toLocalDateTime()
                 val hari = dateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale("id", "ID"))
                 val jam = String.format("%02d:00", dateTime.hour)
                 return "$hari\n$jam"
             }
         }
 
-        mChart.axisRight.isEnabled = false
+        // Update tampilan chart
         mChart.invalidate()
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,6 +1,5 @@
 package com.example.aplikasi_zulham.View
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +7,13 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.aplikasi_zulham.Controller.UserController
 import androidx.lifecycle.lifecycleScope
+import com.example.aplikasi_zulham.Controller.UserController
 import com.example.aplikasi_zulham.Controller.UsersController
-import com.example.aplikasi_zulham.ForgetPassword
 import com.example.aplikasi_zulham.Helper.NetworkHelper
 import com.example.aplikasi_zulham.Model.User
 import com.example.aplikasi_zulham.ViewModel.ViewModelAlert
 import com.example.aplikasi_zulham.databinding.ActivityLoginBinding
-import com.example.aplikasi_zulham.repository.Users
 import com.example.aplikasi_zulham.repository.UsersLogin
 import kotlinx.coroutines.launch
 
@@ -26,6 +23,7 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
     private lateinit var networkHelper: NetworkHelper
     private lateinit var alertDialog: ViewModelAlert
     private val userController = UserController()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,18 +31,34 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
         setContentView(binding.root)
 
         alertDialog = ViewModelAlert(this)
+        networkHelper = NetworkHelper(this).also {
+            it.setNetworkListener(this)
+            it.startNetworkCallback()
+        }
 
-        networkHelper = NetworkHelper(this)
-        networkHelper.setNetworkListener(this)
-        networkHelper.startNetworkCallback()
-
-
+        // ===== Spinner destinasi =====
         val kategori = arrayOf("Kuta", "Bukit Merese", "Pantai", "Sirkuit Mandalika")
         val adapter = ArrayAdapter(
-            this, R.layout.simple_spinner_item, kategori
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            this, android.R.layout.simple_spinner_item, kategori
+        ).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
         binding.PilihanDestinasi.adapter = adapter
+
+        // ===== Prefs untuk remember me =====
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val remembered = prefs.getBoolean("remember", false)
+        binding.rememberCheck.isChecked = remembered
+        if (remembered) {
+            // Prefill username & destinasi
+            binding.usernameEditText.setText(prefs.getString("savedUsername", ""))
+            val savedDestIndex = prefs.getInt("savedDestinationIndex", 0)
+            if (savedDestIndex in kategori.indices) {
+                binding.PilihanDestinasi.setSelection(savedDestIndex)
+            }
+        }
+
+        // ===== Tombol daftar =====
         binding.click.setOnClickListener {
             if (NetworkHelper.isConnected(this)) {
                 val intent = Intent(this, register::class.java)
@@ -54,80 +68,95 @@ class LoginActivity : AppCompatActivity(), NetworkHelper.NetworkListener {
             }
         }
 
-        binding.ForgotPasswordID.setOnClickListener {
-            if (NetworkHelper.isConnected(this)) {
-                val intent = Intent(this, ForgetPassword::class.java)
-                startActivity(intent)
-            } else {
-                alertDialog.startLoadingDialogJaringan()
-            }
-        }
-
+        // ===== Tombol masuk =====
         binding.loginButton.setOnClickListener {
-            val username = binding.usernameEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            val hasil = userController.Login(User(username,password),window.decorView.rootView)
+            val usernameInput = binding.usernameEditText.text?.toString().orEmpty()
+            val passwordInput = binding.passwordEditText.text?.toString().orEmpty()
 
-
-
-            if (username.isEmpty()) {
-                binding.loginusername.error = "Nama Tidak Boleh Kosong"
-                return@setOnClickListener
+            // Validasi sederhana
+            var hasError = false
+            if (usernameInput.isEmpty()) {
+                binding.loginusername.error = "Nama tidak boleh kosong"
+                hasError = true
+            } else {
+                binding.loginusername.error = null
             }
-            if (password.isEmpty()) {
-                binding.loginusername.error = "Nama Tidak Boleh Kosong"
-                return@setOnClickListener
+
+            if (passwordInput.isEmpty()) {
+                binding.loginpassword.error = "Password tidak boleh kosong"
+                hasError = true
+            } else {
+                binding.loginpassword.error = null
             }
+
+            if (hasError) return@setOnClickListener
+
             if (!NetworkHelper.isConnected(this)) {
                 alertDialog.startLoadingDialogJaringan()
                 return@setOnClickListener
             }
 
-            binding.loginusername.error = null
+            // (Kalau kamu butuh logic UI lain, ini nampaknya memanggil validasi custom kamu)
+            userController.Login(User(usernameInput, passwordInput), window.decorView.rootView)
 
             lifecycleScope.launch {
-                val users = UsersLogin(username, password,binding.PilihanDestinasi.selectedItemPosition+1   )
-                val controller = UsersController()
-                val result = controller.Login(users)
+                try {
+                    val destinasiId = binding.PilihanDestinasi.selectedItemPosition + 1
+                    val controller = UsersController()
+                    val result = controller.Login(UsersLogin(usernameInput, passwordInput, destinasiId))
 
-                val (token, role) = result.first
-                val (id, username) = result.second
-                if (token != null && role != null) {
+                    val (token, role) = result.first
+                    val (id, usernameResult) = result.second  // hindari bentrok nama variabel
 
-                    val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
-                    prefs.edit()
-                        .putString("token", token)
-                        .putString("role", role)
-                        .putInt("id", id ?: -1)
-                        .putString("username",username)
-                        .putInt("DestinasiID",binding.PilihanDestinasi.selectedItemPosition+1)
-                        .putString("NamaDestinasi",binding.PilihanDestinasi.selectedItem.toString())
-                        .apply()
+                    if (token != null && role != null) {
+                        // Simpan session utama (token, role, dll)
+                        prefs.edit()
+                            .putString("token", token)
+                            .putString("role", role)
+                            .putInt("id", id ?: -1)
+                            .putString("username", usernameResult) // dari server
+                            .putInt("DestinasiID", destinasiId)
+                            .putString("NamaDestinasi", binding.PilihanDestinasi.selectedItem.toString())
+                            .apply()
 
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("username", username)
-                    startActivity(intent)
-                    finish()
-                }else{
-                    Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
+                        // Simpan/bersihkan data remember me
+                        if (binding.rememberCheck.isChecked) {
+                            prefs.edit()
+                                .putBoolean("remember", true)
+                                .putString("savedUsername", usernameInput)
+                                .putInt("savedDestinationIndex", binding.PilihanDestinasi.selectedItemPosition)
+                                .apply()
+                        } else {
+                            prefs.edit()
+                                .remove("remember")
+                                .remove("savedUsername")
+                                .remove("savedDestinationIndex")
+                                .apply()
+                        }
 
+                        // Lanjut ke Main
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        intent.putExtra("username", usernameResult)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Login Gagal", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("LoginActivity", "Login error", e)
+                    Toast.makeText(this@LoginActivity, "Terjadi kesalahan. Coba lagi.", Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
+    // ===== Network callbacks =====
     override fun onNetworkAvailable() {
-        runOnUiThread {
-            alertDialog.dismissDialog()
-        }
-
+        runOnUiThread { alertDialog.dismissDialog() }
     }
 
     override fun onNetworkLost() {
-        runOnUiThread {
-            alertDialog.startLoadingDialogJaringan()
-        }
+        runOnUiThread { alertDialog.startLoadingDialogJaringan() }
     }
 
     override fun onDestroy() {

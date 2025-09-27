@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Laporin"
+            android:text="SIWASPADA"
             android:id="@+id/head"
             android:textColor="@color/birumuda"
             android:textSize="24sp"
