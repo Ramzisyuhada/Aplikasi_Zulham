@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.aplikasi_zulham.Adapter.MediaAdapter
@@ -26,14 +28,25 @@ class AduanAdmin : Fragment() {
     private val binding get() = _binding!!
     private var param1: String? = null
     private var param2: String? = null
+    private var skipFirstSpinnerCallback = true
 
 
-
+    private val statusOptions = listOf("pending", "proses", "selesai")
+    private val displayLabels by lazy {
+        statusOptions.map { it.replaceFirstChar { c -> c.titlecase(Locale("id", "ID")) } }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAduanBinding.inflate(inflater, container, false)
+        val spinner = binding.spinnerStatusAduan
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, displayLabels)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.isEnabled = false
+        spinner.isClickable = false
+        val idComplaintArg = arguments?.getInt("id_complaint", -1) ?: -1
 
         lifecycleScope.launch {
             val id_complaint = arguments?.getInt("id_complaint")
@@ -42,6 +55,11 @@ class AduanAdmin : Fragment() {
             val controller = AduanController()
             val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
             val token = prefs.getString("token", null)
+            val role = prefs.getString("role", null)
+
+            val isAdmin = role.equals("admin", ignoreCase = true)
+            spinner.isEnabled = isAdmin
+            spinner.isClickable = isAdmin
 
             id_complaint?.let { id ->
                 token?.let { token ->
@@ -56,6 +74,7 @@ class AduanAdmin : Fragment() {
                     val idComplaint = dataObject.getInt("id_complaint")
                     val complaintDate = dataObject.getString("complaint_date")
                     val mediaArray = dataObject.getJSONArray("media")
+                    val statusRaw = dataObject.getString("status") // "pending" | "proses" | "selesai"
 
                     Log.d("MEDIA_ARRAY", jsonObject.toString())
 
@@ -80,6 +99,36 @@ class AduanAdmin : Fragment() {
                     binding.DeskripsiTourisgGuidIDs.text = complaint
                     binding.NomerAduanID.text = "#0000$idComplaint"
                     binding.TanggalAduanID.text = formatTanggal(complaintDate)
+
+                    val idx = statusOptions.indexOf(statusRaw.lowercase(Locale.ROOT)).let { if (it >= 0) it else 0 }
+                    skipFirstSpinnerCallback = true
+
+                    spinner.setSelection(idx, false)
+
+
+                    if (isAdmin) {
+                        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>, view: View?, position: Int, id: Long
+                            ) {
+                                if (skipFirstSpinnerCallback) {
+                                    skipFirstSpinnerCallback = false
+                                    return
+                                }
+                                val newStatus = statusOptions[position]
+                                if (newStatus != statusRaw) {
+                                    lifecycleScope.launch {
+                                        controller.UpdateIoByAdmin(id_complaint, token, newStatus)
+                                    }
+                                }
+                            }
+                            override fun onNothingSelected(parent: AdapterView<*>) {}
+                        }
+                    } else {
+                        // Non-admin: read-only
+                        spinner.onItemSelectedListener = null
+                    }
+
                 }
             }
         }

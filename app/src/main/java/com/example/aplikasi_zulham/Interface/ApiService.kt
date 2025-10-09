@@ -107,4 +107,7 @@ interface ApiService {
     @GET("showPengaduan/{id}")
     suspend fun GetAduanbyAdmin(@Path("id") userId: Int):Response<ResponseBody>
 
+    @PUT("admin/complaints/{id}/status")
+    suspend fun  UpdatePengaduanById( @Path("id") id: Int,
+                                      @Body rating: Map<String, @JvmSuppressWildcards Any>) :Response<ResponseBody>
 }

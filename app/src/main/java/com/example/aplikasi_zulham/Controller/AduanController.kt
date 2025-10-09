@@ -148,6 +148,35 @@ class AduanController {
             }
         }
     }
+
+
+    suspend fun UpdateIoByAdmin(
+        id: Int,
+        token: String,
+        status: String
+    ): JSONObject {
+        return try {
+            val body = mapOf("status" to status)
+
+            val response = AuthInstance.getInstance(token).UpdatePengaduanById(id, body)
+
+            return if (response.isSuccessful) {
+                val bodyString = response.body()?.string()
+                Log.d("PUT", "Response : $bodyString")
+                JSONObject(bodyString ?: "{}")
+            } else {
+                val errorString = response.errorBody()?.string()
+                Log.e("PUT", "Error body : $errorString")
+                JSONObject(errorString ?: "{\"error\":\"Unknown error\"}")
+            }
+        } catch (e: Exception) {
+            Log.e("PUT", "Exception : ${e.message}")
+            JSONObject().apply {
+                put("error", e.message ?: "Unknown exception")
+            }
+        }
+    }
+
     suspend fun GetAduanByIdAdmin (Id : Int,Token: String):JSONObject{
         return try {
             val Response = AuthInstance.getInstance(Token).GetAduanbyAdmin(Id)
@@ -167,7 +196,9 @@ class AduanController {
             Log.e("POST","Error Nya Adalah : " + e.toString())
             JSONObject().apply {
                 put("error", e.message ?: "Unknown exception")
-            }        }
+            }
+
+        }
     }
 
 

@@ -41,6 +41,10 @@ class Aduan : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,6 +68,9 @@ class Aduan : Fragment() {
             val prefs = requireContext().getSharedPreferences("user_prefs", MODE_PRIVATE)
             val token = prefs.getString("token", null)
             val role = prefs.getString("role", null)
+            val isAdmin = role.equals("admin", ignoreCase = true)
+            spinner.isEnabled = isAdmin
+            spinner.isClickable = isAdmin
 
             if (idComplaintArg <= 0 || token.isNullOrEmpty()) {
                 Log.e("Aduan", "Arg id_complaint/token tidak valid")

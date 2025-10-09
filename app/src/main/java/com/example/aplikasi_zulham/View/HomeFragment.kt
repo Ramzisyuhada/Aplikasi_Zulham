@@ -42,6 +42,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var adapterBerita: AdapterBerita
     private val beritaList = ArrayList<Laporan>()
+    private data class AduanSearch(val username: String, val idComplaint: Int)
+    private val searchIndex = mutableListOf<AduanSearch>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,6 +89,7 @@ class HomeFragment : Fragment() {
         val destinasiId = prefs.getInt("DestinasiID", -1)
 
         beritaList.clear()
+        searchIndex.clear()    // ⬅️ penting: reset index
 
         lifecycleScope.launch {
             try {
@@ -102,12 +106,15 @@ class HomeFragment : Fragment() {
 
                 for (i in 0 until total) {
                     val item = dataArray.getJSONObject(i)
+                    val complaintId = item.getInt("id_complaint")
+
                     val username = item.getJSONObject("user").getString("username")
                     val complaint = item.getString("complaint")
                     val tanggal = item.getString("complaint_date")
                     val jam = tanggal.split(" ")
                     val tourName = item.getJSONObject("tour").getString("tour_name")
                     val mediaArray = item.getJSONArray("media")
+                    searchIndex.add(AduanSearch(username = username, idComplaint = complaintId))
 
                     ambilGambarDariMedia(mediaArray) { bitmap ->
                         beritaList.add(
@@ -226,14 +233,43 @@ class HomeFragment : Fragment() {
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) {
-                    replaceFragment(Aduan())
+                val q = query?.trim().orEmpty()
+                if (q.isEmpty()) return false
+
+                // cari di index (username contains query)
+                val matches = searchIndex.filter { it.username.contains(q, ignoreCase = true) }
+
+                if (matches.isEmpty()) {
+                    android.widget.Toast.makeText(
+                        requireContext(),
+                        "Tidak ditemukan: $q",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Ambil data pertama yang cocok dan buat Bundle
+                    val m = matches.first()
+                    val bundle = Bundle().apply {
+                        putInt("id_complaint", m.idComplaint)
+                        putString("username", m.username)
+                    }
+
+                    // Langsung pindah ke fragment Aduan dengan bundle
+                    val aduanFragment = Aduan().apply { arguments = bundle }
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.Frame, aduanFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
-                return false
+
+                binding.searchView.clearFocus()
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean = false
         })
+
+
     }
 
     override fun onResume() {

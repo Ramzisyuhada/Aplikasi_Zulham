@@ -12,6 +12,8 @@ class Aduan   {
     var isVideo: Boolean = false
     var videoFile: File? = null
     var File = ArrayList<File>()
+
+
     constructor()
 
     constructor(File : File ){
